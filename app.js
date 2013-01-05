@@ -2,6 +2,22 @@ $(function() {
   var COMMON_COUNT = 20
   var CELL_WIDTH = 50
   $.getJSON("recipes.json", function(recipes) {
+    var correlation = {}
+    for (var i = 0; i < recipes.length; i++) {
+      var current = correlation[recipes[i].name] = {}
+      for (var j = 0; j < recipes.length; j++) {
+        if (i == j)
+          continue
+        var common = 0
+        _.each(recipes[i].ingredients, function(it) {
+          _.each(recipes[j].ingredients, function(it2) {
+            if (it.ingredient !== undefined && it.ingredient === it2.ingredient)
+              common++
+          })
+        })
+        current[recipes[j].name] = common
+      }
+    }
     var ingredients = _.chain(recipes)
       .map(function(r) { return r.ingredients })
       .flatten()
