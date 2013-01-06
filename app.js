@@ -12,7 +12,7 @@ $(function() {
         _.each(recipes[i].ingredients, function(it) {
           _.each(recipes[j].ingredients, function(it2) {
             if (it.ingredient !== undefined && it.ingredient === it2.ingredient)
-              common++
+              common += Math.min(it.cl, it2.cl)
           })
         })
         current[recipes[j].name] = common
