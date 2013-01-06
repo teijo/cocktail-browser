@@ -39,14 +39,21 @@ $(function() {
       row.append(span.clone().text(ingredients[i].name))
     }
     body.append(row)
+    var listed = []
+    var previous = null
     for (var i = 0; i < recipes.length; i++) {
+      var r = recipes[i]
+      if (previous !== null)
+        r = _.chain(recipes).filter(function(it) { return !_.contains(listed, it.name) }).max(function(it) { return correlation[previous.name][it.name] }).value()
+      previous = r
+      listed.push(r.name)
       var row = div.clone()
-      row.append(span.clone().addClass("name").text(recipes[i].name))
+      row.append(span.clone().addClass("name").text(r.name))
       var special = span.clone().addClass("special")
       row.append(special)
-      for (var j = 0; j < recipes[i].ingredients.length; j++) {
-        var name = recipes[i].ingredients[j].ingredient
-        var cl = recipes[i].ingredients[j].cl
+      for (var j = 0; j < r.ingredients.length; j++) {
+        var name = r.ingredients[j].ingredient
+        var cl = r.ingredients[j].cl
         var offset = _.find(ingredients, function(i) { return i.name === name })
         if (offset === undefined)
           offset = 100
@@ -56,7 +63,7 @@ $(function() {
           row.append(item.text(cl + "cl"))
         }
         else {
-          var it = recipes[i].ingredients[j]
+          var it = r.ingredients[j]
           if (it.special !== undefined)
             special.append(it.special)
           else
