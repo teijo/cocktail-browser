@@ -3,7 +3,7 @@ function toClass(string) {
 }
 
 $(function() {
-  var COMMON_COUNT = 20
+  var COMMON_COUNT = 15
   var CELL_WIDTH = 50
   $.getJSON("recipes.json", function(recipes) {
     var correlation = {}
@@ -80,7 +80,7 @@ $(function() {
         var item = span.clone()
         if (offset.position < COMMON_COUNT) {
           item.css("position", "absolute").css("left", 100+(offset.position)*CELL_WIDTH)
-          row.append(item.addClass("cl").text(cl + "cl"))
+          row.append(item.addClass("cl").text(cl))
         }
         else {
           var it = r.ingredients[j]

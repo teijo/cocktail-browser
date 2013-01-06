@@ -1,6 +1,5 @@
 div, span {
   box-sizing: border-box;
-  overflow: hidden;
   white-space: nowrap;
 }
 div {
@@ -28,6 +27,8 @@ div.cocktail span.cl {
 }
 div.cocktail .name {
   width: 100px;
+  overflow: hidden;
+  text-align: left;
 }
 #ingredients {
   left: 100px;
@@ -58,14 +59,13 @@ div.cocktail .name {
 #ingredients span.selected {
   background-color: #FCC;
 }
-.name {
+div.cocktail span.name {
   width: 100px;
-  background-color: #CCC;
+  border: none;
 }
 div.cocktail span.special {
-  width: 300px;
   background-color: #CEC;
-  left: 1100px;
+  left: 850px;
   position: absolute;
   text-align: left;
 }
