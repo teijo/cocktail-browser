@@ -1,3 +1,7 @@
+function toClass(string) {
+  return string.toLowerCase().replace(/\W+/g, "-")
+}
+
 $(function() {
   var COMMON_COUNT = 20
   var CELL_WIDTH = 50
@@ -33,10 +37,27 @@ $(function() {
     var body = $("body")
     var div = $('<div>')
     var span = $('<span>')
-    var row = div.clone()
+    var row = div.clone().attr("id", "ingredients")
     row.append(span.clone().addClass('name').text("Ingredients"))
     for (var i = 0; i < ingredients.length && i < COMMON_COUNT; i++) {
-      row.append(span.clone().text(ingredients[i].name))
+      var title = span.clone().text(ingredients[i].name)
+      title.click(function() {
+        var clickedName = $(this).text()
+        $('div').toggle(true)
+        if ($(this).hasClass("selected")) {
+          $(this).toggleClass("selected")
+          return
+        }
+        $('#ingredients span').removeClass('selected')
+        $(this).toggleClass("selected")
+        var noIngredient = _.filter(recipes, function(it) {
+          return _.chain(it.ingredients).find(function(it) { return it.ingredient == clickedName }).isUndefined().value()
+        }).map(function(it) { return toClass(it.name) })
+        _.each(noIngredient, function(it) {
+          $("."+it).toggle(false)
+        })
+      })
+      row.append(title)
     }
     body.append(row)
     var listed = []
@@ -47,7 +68,7 @@ $(function() {
         r = _.chain(recipes).filter(function(it) { return !_.contains(listed, it.name) }).max(function(it) { return correlation[previous.name][it.name] }).value()
       previous = r
       listed.push(r.name)
-      var row = div.clone()
+      var row = div.clone().addClass(toClass(r.name))
       row.append(span.clone().addClass("name").text(r.name))
       var special = span.clone().addClass("special")
       row.append(special)

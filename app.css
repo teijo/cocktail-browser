@@ -13,6 +13,15 @@ span {
   float: left;
   font-size: 12px;
 }
+#ingredients span {
+  cursor: pointer;
+}
+#ingredients span:hover {
+  background-color: #FEE;
+}
+#ingredients span.selected {
+  background-color: #FCC;
+}
 .name {
   width: 100px;
   background-color: #CCC;
