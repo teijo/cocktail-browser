@@ -38,14 +38,13 @@ $(function() {
     var div = $('<div>')
     var span = $('<span>')
     var row = div.clone().attr("id", "ingredients")
-    row.append(span.clone().addClass('name').text("Ingredients"))
     for (var i = 0; i < ingredients.length && i < COMMON_COUNT; i++) {
-      var title = span.clone().text(ingredients[i].name)
+      var title = span.clone().html("<span>"+ingredients[i].name+"</span>")
       title.click(function() {
         var clickedName = $(this).text()
         $('div').toggle(true)
         if ($(this).hasClass("selected")) {
-          $(this).toggleClass("selected")
+        $(this).toggleClass("selected")
           return
         }
         $('#ingredients span').removeClass('selected')
@@ -68,7 +67,7 @@ $(function() {
         r = _.chain(recipes).filter(function(it) { return !_.contains(listed, it.name) }).max(function(it) { return correlation[previous.name][it.name] }).value()
       previous = r
       listed.push(r.name)
-      var row = div.clone().addClass(toClass(r.name))
+      var row = div.clone().addClass("cocktail").addClass(toClass(r.name))
       row.append(span.clone().addClass("name").text(r.name))
       var special = span.clone().addClass("special")
       row.append(special)
@@ -81,7 +80,7 @@ $(function() {
         var item = span.clone()
         if (offset.position < COMMON_COUNT) {
           item.css("position", "absolute").css("left", 100+(offset.position)*CELL_WIDTH)
-          row.append(item.text(cl + "cl"))
+          row.append(item.addClass("cl").text(cl + "cl"))
         }
         else {
           var it = r.ingredients[j]
