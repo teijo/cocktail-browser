@@ -42,7 +42,7 @@ $(function() {
       var title = span.clone().html("<span>"+ingredients[i].name+"</span>")
       title.click(function() {
         var clickedName = $(this).text()
-        $('div').toggle(true)
+        $('div.cocktail').toggle(true)
         if ($(this).hasClass("selected")) {
         $(this).toggleClass("selected")
           return
@@ -69,6 +69,21 @@ $(function() {
       listed.push(r.name)
       var row = div.clone().addClass("cocktail").addClass(toClass(r.name))
       row.append(span.clone().addClass("name").text(r.name))
+      var all = div.clone().addClass("all")
+      var ul = $('<ul>')
+      var li = $('<li>')
+      for (var j = 0; j < r.ingredients.length; j++) {
+        var item
+        var it = r.ingredients[j]
+        if (it.special !== undefined)
+          item = it.special
+        else
+          item = it.cl+"cl "+it.ingredient
+        ul.append(li.clone().append(item))
+      }
+      all.append(ul)
+      all.append('<div class="preparation">'+r.preparation+'</div>')
+      row.append(all)
       var special = span.clone().addClass("special")
       row.append(special)
       for (var j = 0; j < r.ingredients.length; j++) {

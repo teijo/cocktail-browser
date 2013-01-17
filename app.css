@@ -69,3 +69,9 @@ div.cocktail span.special {
   position: absolute;
   text-align: left;
 }
+div.all {
+  display: none;
+}
+div.cocktail:hover div.all {
+  display: block;
+}
