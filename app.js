@@ -5,7 +5,7 @@ function toClass(string) {
 $(function() {
   var COMMON_COUNT = 15
   var CELL_WIDTH = 50
-  $.getJSON("recipes.json", function(recipes) {
+  $.getJSON("iba-cocktails/recipes.json", function(recipes) {
     var correlation = {}
     for (var i = 0; i < recipes.length; i++) {
       var current = correlation[recipes[i].name] = {}
