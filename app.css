@@ -34,8 +34,16 @@ div.cocktail .name {
   overflow: hidden;
   text-align: left;
 }
-#ingredients {
+#ingredients, #ingredientHeader  {
   left: 100px;
+}
+
+#ingredientHeader {
+  width: 750px;
+  text-align: center;
+  border: 1px solid #CCC;
+  border-bottom: none;
+  font-size: 0.8em;
 }
 #ingredients > span {
   cursor: pointer;
