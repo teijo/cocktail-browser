@@ -114,6 +114,10 @@ div.all ul {
   margin: 1em;
   padding-left: 1.5em;
 }
+div.all ul li.selected {
+  color: #C00;
+  text-decoration: italic;
+}
 div.all .preparation {
   margin: 0 1em 1em 1em;
   width: 500px;

@@ -45,7 +45,7 @@ $(function() {
       title.click(function() {
         var clickedName = $(this).text()
         $('div.cocktail').toggle(true)
-        $('span.cl').toggleClass('selected', false)
+        $('span.cl, li').toggleClass('selected', false)
         if ($(this).hasClass("selected")) {
           $(this).toggleClass("selected")
           return
@@ -83,7 +83,7 @@ $(function() {
           item = it.special
         else
           item = it.cl+"cl "+it.ingredient
-        ul.append(li.clone().append(item))
+        ul.append(li.clone().append(item).attr('title', it.ingredient))
       }
       all.append(ul)
       if (r.preparation !== undefined)
