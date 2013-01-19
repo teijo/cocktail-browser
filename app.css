@@ -1,3 +1,6 @@
+body {
+  overflow-x: hidden;
+}
 div, span {
   box-sizing: border-box;
   white-space: nowrap;
