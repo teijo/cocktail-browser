@@ -95,6 +95,7 @@ $(function() {
         var item = span.clone()
         if (offset.position < COMMON_COUNT) {
           item.css("position", "absolute").css("left", 100+(offset.position)*CELL_WIDTH)
+          item.attr('title', name)
           row.append(item.addClass("cl").text(cl))
         }
         else {
