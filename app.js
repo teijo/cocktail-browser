@@ -38,7 +38,7 @@ $(function() {
     var div = $('<div>')
     var span = $('<span>')
     var row = div.clone().attr("id", "ingredients")
-    var titleRow = div.clone().text('Common ingredients').attr('id', 'ingredientHeader')
+    var titleRow = div.clone().html('&larr; More common - INGREDIENTS - Less common &rarr;').attr('id', 'ingredientHeader')
     body.append(titleRow)
     ingredients.each(function(ing, i) {
       if (i >= COMMON_COUNT)
