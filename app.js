@@ -86,7 +86,8 @@ $(function() {
         ul.append(li.clone().append(item))
       }
       all.append(ul)
-      all.append('<div class="preparation">'+r.preparation+'</div>')
+      if (r.preparation !== undefined)
+        all.append('<div class="preparation">'+r.preparation+'</div>')
       row.append(all)
       var special = span.clone().addClass("special")
       var specials = []
