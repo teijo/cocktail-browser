@@ -38,7 +38,7 @@ $(function() {
     var div = $('<div>')
     var span = $('<span>')
     var row = div.clone().attr("id", "ingredients")
-    var titleRow = div.clone().text('Common ingredients, click to filter').attr('id', 'ingredientHeader')
+    var titleRow = div.clone().text('Common ingredients').attr('id', 'ingredientHeader')
     body.append(titleRow)
     for (var i = 0; i < ingredients.length && i < COMMON_COUNT; i++) {
       var title = span.clone().html("<span>"+ingredients[i].name+"</span>")

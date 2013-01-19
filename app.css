@@ -41,9 +41,6 @@ div.cocktail .name {
 #ingredientHeader {
   width: 750px;
   text-align: center;
-  border: 1px solid #CCC;
-  border-bottom: none;
-  font-size: 0.8em;
 }
 #ingredients > span {
   cursor: pointer;
@@ -80,14 +77,13 @@ div.cocktail .name {
   background-color: #FCC;
 }
 div.cocktail.selected {
-  background-color: #EEE;
   border: 1px solid #CCC;
   border-left: none;
   border-right: none;
   box-sizing: border-box;
 }
 div.cocktail.selected:hover {
-  background-color: #DDD;
+  background-color: transparent;
 }
 div.cocktail.selected span.cl, div.cocktail.selected span.special {
   display: none;
@@ -120,4 +116,6 @@ div.all ul {
 }
 div.all .preparation {
   margin: 0 1em 1em 1em;
+  width: 500px;
+  white-space: normal;
 }
