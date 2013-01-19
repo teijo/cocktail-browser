@@ -9,16 +9,17 @@ $(function() {
     var correlation = {}
     _(recipes).each(function(r1) {
       var current = correlation[r1.name] = {}
-      _(recipes).each(function(r2) {
-        if (r1 == r2)
-          return
+      _(recipes).filter(function(it) { return it != r1 }).each(function(r2) {
         var common = 0
-        _(r1.ingredients).each(function(it) {
-          _(r2.ingredients).each(function(it2) {
-            if (it.ingredient !== undefined && it.ingredient === it2.ingredient)
-              common += Math.min(it.cl, it2.cl)
+        _(r1.ingredients)
+          .filter(function(it) { return it.ingredient !== undefined })
+          .each(function(it) {
+            _(r2.ingredients)
+              .filter(function(it2) { return it.ingredient === it2.ingredient })
+              .each(function(it2) {
+                common += Math.min(it.cl, it2.cl)
+            })
           })
-        })
         current[r2.name] = common
       })
     })
