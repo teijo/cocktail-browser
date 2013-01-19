@@ -60,6 +60,9 @@ div.cocktail .name {
 #ingredients span.selected {
   background-color: #FCC;
 }
+div.cocktail.selected {
+  background-color: #EEE;
+}
 div.cocktail span.name {
   width: 100px;
   border: none;

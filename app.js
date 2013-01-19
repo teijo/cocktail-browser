@@ -106,6 +106,7 @@ $(function() {
         }
       }
       row.click(function() {
+        $(this).toggleClass('selected')
         $(this).find('.all').toggle()
       })
       body.append(row)
