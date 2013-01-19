@@ -76,3 +76,10 @@ div.cocktail span.special {
 div.all {
   display: none;
 }
+div.all ul {
+  margin: 1em;
+  padding-left: 1.5em;
+}
+div.all .preparation {
+  margin: 0 1em 1em 1em;
+}
