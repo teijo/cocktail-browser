@@ -43,8 +43,9 @@ $(function() {
       title.click(function() {
         var clickedName = $(this).text()
         $('div.cocktail').toggle(true)
+        $('span.cl').toggleClass('selected', false)
         if ($(this).hasClass("selected")) {
-        $(this).toggleClass("selected")
+          $(this).toggleClass("selected")
           return
         }
         $('#ingredients span').removeClass('selected')
@@ -55,6 +56,7 @@ $(function() {
         _.each(noIngredient, function(it) {
           $("."+it).toggle(false)
         })
+        $('[title="'+clickedName+'"]').toggleClass('selected')
       })
       row.append(title)
     }

@@ -72,6 +72,9 @@ div.cocktail.selected:hover {
 div.cocktail.selected span.cl, div.cocktail.selected span.special {
   display: none;
 }
+div.cocktail span.cl.selected {
+  background-color: #FEE;
+}
 div.cocktail span.name {
   width: 100px;
   border: none;
