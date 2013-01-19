@@ -33,7 +33,6 @@ $(function() {
       .reverse()
       .map(function(ingredient, index) { var o = {}; return { name: ingredient[0], count: ingredient[1], position: index } })
 
-      console.log(ingredients)
     var body = $("body")
     var div = $('<div>')
     var span = $('<span>')
