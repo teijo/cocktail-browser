@@ -105,6 +105,9 @@ $(function() {
             special.append(it.cl+"cl "+it.ingredient+",")
         }
       }
+      row.click(function() {
+        $(this).find('.all').toggle()
+      })
       body.append(row)
     }
   })

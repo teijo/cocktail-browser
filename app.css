@@ -9,6 +9,7 @@ div {
 }
 div.cocktail {
   width: 100%;
+  cursor: pointer;
 }
 div.cocktail:hover {
   background-color: #EEE;
@@ -71,7 +72,4 @@ div.cocktail span.special {
 }
 div.all {
   display: none;
-}
-div.cocktail:hover div.all {
-  display: block;
 }
