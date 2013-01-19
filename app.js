@@ -7,21 +7,21 @@ $(function() {
   var CELL_WIDTH = 50
   $.getJSON("iba-cocktails/recipes.json", function(recipes) {
     var correlation = {}
-    for (var i = 0; i < recipes.length; i++) {
-      var current = correlation[recipes[i].name] = {}
-      for (var j = 0; j < recipes.length; j++) {
-        if (i == j)
-          continue
+    _(recipes).each(function(r1) {
+      var current = correlation[r1.name] = {}
+      _(recipes).each(function(r2) {
+        if (r1 == r2)
+          return
         var common = 0
-        _(recipes[i].ingredients).each(function(it) {
-          _(recipes[j].ingredients).each(function(it2) {
+        _(r1.ingredients).each(function(it) {
+          _(r2.ingredients).each(function(it2) {
             if (it.ingredient !== undefined && it.ingredient === it2.ingredient)
               common += Math.min(it.cl, it2.cl)
           })
         })
-        current[recipes[j].name] = common
-      }
-    }
+        current[r2.name] = common
+      })
+    })
     var ingredients = _(recipes)
       .map(function(r) { return r.ingredients })
       .flatten()
@@ -67,8 +67,7 @@ $(function() {
     body.append(row)
     var listed = []
     var previous = null
-    for (var i = 0; i < recipes.length; i++) {
-      var r = recipes[i]
+    _(recipes).each(function(r) {
       if (previous !== null) {
         r = _(recipes).filter(function(it) { return !_.contains(listed, it.name) }).max(function(it) { return correlation[previous.name][it.name] }).__wrapped__
       }
@@ -79,24 +78,23 @@ $(function() {
       var all = div.clone().addClass("all")
       var ul = $('<ul>')
       var li = $('<li>')
-      for (var j = 0; j < r.ingredients.length; j++) {
+      _(r.ingredients).each(function(ingredient) {
         var item
-        var it = r.ingredients[j]
-        if (it.special !== undefined)
-          item = it.special
+        if (ingredient.special !== undefined)
+          item = ingredient.special
         else
-          item = it.cl+"cl "+it.ingredient
-        ul.append(li.clone().append(item).attr('title', it.ingredient))
-      }
+          item = ingredient.cl+"cl "+ingredient.ingredient
+        ul.append(li.clone().append(item).attr('title', ingredient.ingredient))
+      })
       all.append(ul)
       if (r.preparation !== undefined)
         all.append('<div class="preparation">'+r.preparation+'</div>')
       row.append(all)
       var special = span.clone().addClass("special")
       var specials = []
-      for (var j = 0; j < r.ingredients.length; j++) {
-        var name = r.ingredients[j].ingredient
-        var cl = r.ingredients[j].cl
+      _(r.ingredients).each(function(ingredient) {
+        var name = ingredient.ingredient
+        var cl = ingredient.cl
         var offset = _(ingredients).find(function(i) { return i.name === name })
         if (offset === undefined)
           offset = 100
@@ -107,13 +105,13 @@ $(function() {
           row.append(item.addClass("cl").text(cl))
         }
         else {
-          var it = r.ingredients[j]
+          var it = ingredient
           if (it.special !== undefined)
             specials.push(it.special)
           else
             specials.push(it.cl+"cl "+it.ingredient)
         }
-      }
+      })
       if (specials.length > 0)
         special.append('+ ')
       special.append(specials.join(', '))
@@ -123,6 +121,6 @@ $(function() {
         $(this).find('.all').toggle()
       })
       body.append(row)
-    }
+    })
   })
 })
