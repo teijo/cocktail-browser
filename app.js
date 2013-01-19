@@ -13,8 +13,8 @@ $(function() {
         if (i == j)
           continue
         var common = 0
-        _.each(recipes[i].ingredients, function(it) {
-          _.each(recipes[j].ingredients, function(it2) {
+        _(recipes[i].ingredients).each(function(it) {
+          _(recipes[j].ingredients).each(function(it2) {
             if (it.ingredient !== undefined && it.ingredient === it2.ingredient)
               common += Math.min(it.cl, it2.cl)
           })
@@ -22,7 +22,7 @@ $(function() {
         current[recipes[j].name] = common
       }
     }
-    var ingredients = _.chain(recipes)
+    var ingredients = _(recipes)
       .map(function(r) { return r.ingredients })
       .flatten()
       .filter(function(item) { return typeof(item.special) === "undefined" })
@@ -32,16 +32,18 @@ $(function() {
       .sortBy(function(ingredient) { return ingredient[1] })
       .reverse()
       .map(function(ingredient, index) { var o = {}; return { name: ingredient[0], count: ingredient[1], position: index } })
-      .value()
 
+      console.log(ingredients)
     var body = $("body")
     var div = $('<div>')
     var span = $('<span>')
     var row = div.clone().attr("id", "ingredients")
     var titleRow = div.clone().text('Common ingredients').attr('id', 'ingredientHeader')
     body.append(titleRow)
-    for (var i = 0; i < ingredients.length && i < COMMON_COUNT; i++) {
-      var title = span.clone().html("<span>"+ingredients[i].name+"</span>")
+    ingredients.each(function(ing, i) {
+      if (i >= COMMON_COUNT)
+        return false
+      var title = span.clone().html("<span>"+ing.name+"</span>")
       title.click(function() {
         var clickedName = $(this).text()
         $('div.cocktail').toggle(true)
@@ -52,23 +54,24 @@ $(function() {
         }
         $('#ingredients span').removeClass('selected')
         $(this).toggleClass("selected")
-        var noIngredient = _.filter(recipes, function(it) {
-          return _.chain(it.ingredients).find(function(it) { return it.ingredient == clickedName }).isUndefined().value()
+        var noIngredient = _(recipes).filter(function(it) {
+          return _.isUndefined(_(it.ingredients).find(function(it) { return it.ingredient == clickedName }))
         }).map(function(it) { return toClass(it.name) })
-        _.each(noIngredient, function(it) {
+        noIngredient.each(function(it) {
           $("."+it).toggle(false)
         })
         $('[title="'+clickedName+'"]').toggleClass('selected')
       })
       row.append(title)
-    }
+    })
     body.append(row)
     var listed = []
     var previous = null
     for (var i = 0; i < recipes.length; i++) {
       var r = recipes[i]
-      if (previous !== null)
-        r = _.chain(recipes).filter(function(it) { return !_.contains(listed, it.name) }).max(function(it) { return correlation[previous.name][it.name] }).value()
+      if (previous !== null) {
+        r = _(recipes).filter(function(it) { return !_.contains(listed, it.name) }).max(function(it) { return correlation[previous.name][it.name] }).__wrapped__
+      }
       previous = r
       listed.push(r.name)
       var row = div.clone().addClass("cocktail").addClass(toClass(r.name))
@@ -94,7 +97,7 @@ $(function() {
       for (var j = 0; j < r.ingredients.length; j++) {
         var name = r.ingredients[j].ingredient
         var cl = r.ingredients[j].cl
-        var offset = _.find(ingredients, function(i) { return i.name === name })
+        var offset = _(ingredients).find(function(i) { return i.name === name })
         if (offset === undefined)
           offset = 100
         var item = span.clone()
