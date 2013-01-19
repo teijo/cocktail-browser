@@ -85,7 +85,7 @@ $(function() {
       all.append('<div class="preparation">'+r.preparation+'</div>')
       row.append(all)
       var special = span.clone().addClass("special")
-      row.append(special)
+      var specials = []
       for (var j = 0; j < r.ingredients.length; j++) {
         var name = r.ingredients[j].ingredient
         var cl = r.ingredients[j].cl
@@ -101,11 +101,15 @@ $(function() {
         else {
           var it = r.ingredients[j]
           if (it.special !== undefined)
-            special.append(it.special)
+            specials.push(it.special)
           else
-            special.append(it.cl+"cl "+it.ingredient+",")
+            specials.push(it.cl+"cl "+it.ingredient)
         }
       }
+      if (specials.length > 0)
+        special.append('+ ')
+      special.append(specials.join(', '))
+      row.append(special)
       row.click(function() {
         $(this).toggleClass('selected')
         $(this).find('.all').toggle()

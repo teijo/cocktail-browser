@@ -68,10 +68,11 @@ div.cocktail span.name {
   border: none;
 }
 div.cocktail span.special {
-  background-color: #CEC;
   left: 850px;
   position: absolute;
   text-align: left;
+  width: auto;
+  border: none;
 }
 div.all {
   display: none;
