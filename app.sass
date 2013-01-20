@@ -18,6 +18,7 @@ div
   left: 100px
 
 #ingredientHeader
+  margin-top: 1em
   width: 750px
   text-align: center
 
@@ -29,6 +30,7 @@ div
     border: 1px solid #CCC
     display: block
     float: left
+    overflow: hidden
     &:hover
       background-color: #FEE
     &:not(:last-child)
@@ -72,6 +74,7 @@ div.cocktail
       &.selected:not:last
         border-bottom: none
   .name
+    padding-left: 1em
     width: 100px
     overflow: hidden
     text-align: left
@@ -87,11 +90,14 @@ div.cocktail
     border-left: none
     border-right: none
     +box-sizing(border-box)
-  &.selected span
-    &.cl, &.special
-      display: none
-  &.selected:hover
-    background-color: transparent
+  &.selected
+    .name
+      width: auto
+    span
+      &.cl, &.special
+        display: none
+    &:hover
+      background-color: transparent
 
 div.all
   display: none
