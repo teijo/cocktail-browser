@@ -102,8 +102,9 @@ div.cocktail
 div.all
   display: none
   ul
+    min-height: 3em
     margin: 1em
-    padding-left: 1.5em
+    padding-left: 4em
     li.selected
       color: #C00
       text-decoration: italic
@@ -111,3 +112,22 @@ div.all
     margin: 0 1em 1em 1em
     width: 500px
     white-space: normal
+  span.glass
+    border: none
+    vertical-align: bottom
+    height: 50px
+    width: 50px
+    display: block
+    position: absolute
+    margin: 1em
+    background-image: url('glasses.png')
+    &.martini
+      background-position: 100px 0
+    &.old-fashioned
+      background-position: 150px 0
+    &.highball
+      background-position: 200px 0
+    &.margarita
+      background-position: 250px 0
+    &.hurricane
+      background-position: 300px 0

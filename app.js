@@ -86,6 +86,7 @@ $(function() {
           item = ingredient.cl+"cl "+ingredient.ingredient
         ul.append(li.clone().append(item).attr('title', ingredient.ingredient))
       })
+      all.append($('<span class="glass '+r.glass+'"></span>'))
       all.append(ul)
       if (r.preparation !== undefined)
         all.append('<div class="preparation">'+r.preparation+'</div>')
