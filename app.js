@@ -91,9 +91,6 @@ $(function() {
       if (r.preparation !== undefined)
         all.append('<div class="preparation">'+r.preparation+'</div>')
 
-      var searchQuery = r.name+" cocktail drink"
-      all.append('<div class="searchTitle">Google image search results for "'+searchQuery+'" below</div>')
-
       all.append('<ul class="images"></ul>')
       row.append(all)
       var special = span.clone().addClass("special")
@@ -127,6 +124,7 @@ $(function() {
         $(this).find('.all').toggle()
         var that = $(this).find('ul.images')
         if (that.html() === "")
+          var searchQuery = r.name+" cocktail drink"
           $.getJSON("https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+searchQuery+"&callback=?",
             function(data) {
               _(data.responseData.results).each(function(img) {
