@@ -76,7 +76,7 @@ $(function() {
       var row = div.clone().addClass("cocktail").addClass(toClass(r.name))
       row.append(span.clone().addClass("name").text(r.name))
       var all = div.clone().addClass("all")
-      var ul = $('<ul>')
+      var ul = $('<ul class="ingredients">')
       var li = $('<li>')
       _(r.ingredients).each(function(ingredient) {
         var item
@@ -90,6 +90,11 @@ $(function() {
       all.append(ul)
       if (r.preparation !== undefined)
         all.append('<div class="preparation">'+r.preparation+'</div>')
+
+      var searchQuery = r.name+" cocktail drink"
+      all.append('<div class="searchTitle">Google image search results for "'+searchQuery+'" below</div>')
+
+      all.append('<ul class="images"></ul>')
       row.append(all)
       var special = span.clone().addClass("special")
       var specials = []
@@ -120,6 +125,15 @@ $(function() {
       row.click(function() {
         $(this).toggleClass('selected')
         $(this).find('.all').toggle()
+        var that = $(this).find('ul.images')
+        if (that.html() === "")
+          $.getJSON("https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+searchQuery+"&callback=?",
+            function(data) {
+              _(data.responseData.results).each(function(img) {
+                $('<li>').append($("<img/>").attr("src", img.tbUrl)).appendTo(that)
+              });
+              return false;
+            });
       })
       body.append(row)
     })
