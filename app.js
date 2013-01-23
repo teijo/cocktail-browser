@@ -3,6 +3,9 @@ function toClass(string) {
 }
 
 $(function() {
+  var rowTmpl = Handlebars.compile($("#row-template").html())
+  var fullTmpl = Handlebars.compile($("#full-template").html())
+
   var COMMON_COUNT = 15
   var CELL_WIDTH = 50
   $.getJSON("iba-cocktails/recipes.json", function(recipes) {
@@ -65,6 +68,7 @@ $(function() {
       row.append(title)
     })
     body.append(row)
+
     var listed = []
     var previous = null
     _(recipes).each(function(r) {
@@ -73,27 +77,7 @@ $(function() {
       }
       previous = r
       listed.push(r.name)
-      var row = div.clone().addClass("cocktail").addClass(toClass(r.name))
-      row.append(span.clone().addClass("name").text(r.name))
-      var all = div.clone().addClass("all")
-      var ul = $('<ul class="ingredients">')
-      var li = $('<li>')
-      _(r.ingredients).each(function(ingredient) {
-        var item
-        if (ingredient.special !== undefined)
-          item = ingredient.special
-        else
-          item = ingredient.cl+"cl "+ingredient.ingredient
-        ul.append(li.clone().append(item).attr('title', ingredient.ingredient))
-      })
-      all.append($('<span class="glass '+r.glass+'"></span>'))
-      all.append(ul)
-      if (r.preparation !== undefined)
-        all.append('<div class="preparation">'+r.preparation+'</div>')
 
-      all.append('<ul class="images"></ul>')
-      row.append(all)
-      var special = span.clone().addClass("special")
       var specials = []
       _(r.ingredients).each(function(ingredient) {
         var name = ingredient.ingredient
@@ -101,11 +85,8 @@ $(function() {
         var offset = _(ingredients).find(function(i) { return i.name === name })
         if (offset === undefined)
           offset = 100
-        var item = span.clone()
         if (offset.position < COMMON_COUNT) {
-          item.css("position", "absolute").css("left", 100+(offset.position)*CELL_WIDTH)
-          item.attr('title', name)
-          row.append(item.addClass("cl").text(cl))
+          ingredient.offset = 100+(offset.position)*CELL_WIDTH
         }
         else {
           var it = ingredient
@@ -115,25 +96,24 @@ $(function() {
             specials.push(it.cl+"cl "+it.ingredient)
         }
       })
-      if (specials.length > 0)
-        special.append('+ ')
-      special.append(specials.join(', '))
-      row.append(special)
-      row.click(function() {
-        $(this).toggleClass('selected')
-        $(this).find('.all').toggle()
-        var that = $(this).find('ul.images')
-        if (that.html() === "")
-          var searchQuery = r.name+" cocktail drink"
-          $.getJSON("https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+searchQuery+"&callback=?",
-            function(data) {
-              _(data.responseData.results).each(function(img) {
-                $('<li>').append($("<img/>").attr("src", img.tbUrl)).appendTo(that)
-              });
-              return false;
-            });
-      })
-      body.append(row)
+      r.specials = specials.join(', ')
+      r.className = toClass(r.name)
+
+      ;(function(data) {
+        var row = $(rowTmpl(data))
+        row.click(function() {
+          row.toggleClass('selected')
+          row.find('.all').toggle()
+          if (row.find('ul.images li').length == 0) {
+            var query = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+data.name+"%20cocktail%20drink&callback=?"
+            $.getJSON(query, function(response) {
+              data.images = _.pluck(response.responseData.results, 'tbUrl')
+              row.append(fullTmpl(data))
+            })
+          }
+        })
+        body.append(row)
+      })(r)
     })
   })
 })

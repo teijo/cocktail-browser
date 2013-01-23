@@ -2,6 +2,7 @@
 <head>
 <script type="text/javascript" src="lib/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="lib/lodash-v1.0.0-rc.3.min.js"></script>
+<script type="text/javascript" src="lib/handlebars-1.0.rc.2.js"></script>
 <script type="text/javascript" src="lib/live.js"></script>
 <script type="text/javascript" src="app.js"></script>
 <link type="text/css" rel="stylesheet" href="app.css" />
@@ -17,6 +18,37 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
   //]]>
+</script>
+<script id="row-template" type="text/x-handlebars-template">
+  <div class="cocktail {{className}}">
+    <span class="name">{{name}}</span>
+    {{#ingredients}}
+      {{#if offset}}
+        <span style="position: absolute; left: {{offset}}px; " title="{{ingredient}}" class="cl">{{cl}}</span>
+      {{/if}}
+    {{/ingredients}}
+    <span class="special">+ {{specials}}</span>
+  </div>
+</script>
+<script id="full-template" type="text/x-handlebars-template">
+  <div class="all">
+    <span class="glass {{glass}}"></span>
+    <ul class="ingredients">
+      {{#ingredients}}
+        {{#if cl}}
+          <li title="{{ingredient}}">{{cl}}cl {{ingredient}}</li>
+        {{else}}
+          <li>{{special}}</li>
+        {{/if}}
+      {{/ingredients}}
+    </ul>
+    <div class="preparation">{{preparation}}</div>
+    <ul class="images">
+      {{#each images}}
+        <li><img src="{{this}}" /></li>
+      {{/each}}
+    </ul>
+  </div>
 </script>
 </head>
 <body>
