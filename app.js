@@ -85,21 +85,19 @@ $(function() {
       r.specials = specials.join(', ')
       r.className = toClass(r.name)
 
-      ;(function(data) {
-        var row = $(rowTmpl(data))
-        row.click(function() {
-          row.toggleClass('selected')
-          row.find('.all').toggle()
-          if (row.find('ul.images li').length == 0) {
-            var query = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+data.name+"%20cocktail%20drink&callback=?"
-            $.getJSON(query, function(response) {
-              data.images = _.pluck(response.responseData.results, 'tbUrl')
-              row.append(fullTmpl(data))
-            })
-          }
-        })
-        $body.append(row)
-      })(r)
+      var row = $(rowTmpl(r))
+      row.click(function() {
+        row.toggleClass('selected')
+        row.find('.all').toggle()
+        if (row.find('ul.images li').length == 0) {
+          var query = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+r.name+"%20cocktail%20drink&callback=?"
+          $.getJSON(query, function(response) {
+            r.images = _.pluck(response.responseData.results, 'tbUrl')
+            row.append(fullTmpl(r))
+          })
+        }
+      })
+      $body.append(row)
     })
   })
 })
