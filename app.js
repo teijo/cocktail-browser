@@ -2,6 +2,10 @@ function toClass(string) {
   return string.toLowerCase().replace(/\W+/g, "-")
 }
 
+function ingredientToString(ingredient) {
+  return (ingredient.special !== undefined) ? ingredient.special : ingredient.cl+"cl "+ingredient.ingredient
+}
+
 $(function() {
   var rowTmpl = Handlebars.compile($("#row-template").html())
   var fullTmpl = Handlebars.compile($("#full-template").html())
@@ -80,22 +84,13 @@ $(function() {
 
       var specials = []
       _(r.ingredients).each(function(ingredient) {
-        var name = ingredient.ingredient
-        var cl = ingredient.cl
-        var offset = _(ingredients).find(function(i) { return i.name === name })
-        if (offset === undefined)
-          offset = 100
-        if (offset.position < COMMON_COUNT) {
+        var offset = _(ingredients).find(function(i) { return i.name === ingredient.ingredient })
+        if (offset !== undefined && offset.position < COMMON_COUNT)
           ingredient.offset = 100+(offset.position)*CELL_WIDTH
-        }
-        else {
-          var it = ingredient
-          if (it.special !== undefined)
-            specials.push(it.special)
-          else
-            specials.push(it.cl+"cl "+it.ingredient)
-        }
+        else
+          specials.push(ingredientToString(ingredient))
       })
+
       r.specials = specials.join(', ')
       r.className = toClass(r.name)
 
