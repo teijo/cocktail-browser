@@ -7,6 +7,8 @@ function ingredientToString(ingredient) {
 }
 
 $(function() {
+  var $body = $("body")
+  var titleTmpl = Handlebars.compile($("#title-template").html())
   var rowTmpl = Handlebars.compile($("#row-template").html())
   var fullTmpl = Handlebars.compile($("#full-template").html())
 
@@ -41,37 +43,26 @@ $(function() {
       .reverse()
       .map(function(ingredient, index) { var o = {}; return { name: ingredient[0], count: ingredient[1], position: index } })
 
-    var body = $("body")
-    var div = $('<div>')
-    var span = $('<span>')
-    var row = div.clone().attr("id", "ingredients")
-    var titleRow = div.clone().html('&larr; More common - INGREDIENTS - Less common &rarr;').attr('id', 'ingredientHeader')
-    body.append(titleRow)
-    ingredients.each(function(ing, i) {
-      if (i >= COMMON_COUNT)
-        return false
-      var title = span.clone().html("<span>"+ing.name+"</span>")
-      title.click(function() {
-        var clickedName = $(this).text()
-        $('div.cocktail').toggle(true)
-        $('span.cl, li').toggleClass('selected', false)
-        if ($(this).hasClass("selected")) {
-          $(this).toggleClass("selected")
-          return
-        }
-        $('#ingredients span').removeClass('selected')
+    var template = titleTmpl(ingredients.first(COMMON_COUNT).value())
+    $body.append(template)
+    $('#ingredients > span').click(function() {
+      var clickedName = $(this).text()
+      $('div.cocktail').toggle(true)
+      $('span.cl, li').toggleClass('selected', false)
+      if ($(this).hasClass("selected")) {
         $(this).toggleClass("selected")
-        var noIngredient = _(recipes).filter(function(it) {
-          return _.isUndefined(_(it.ingredients).find(function(it) { return it.ingredient == clickedName }))
-        }).map(function(it) { return toClass(it.name) })
-        noIngredient.each(function(it) {
-          $("."+it).toggle(false)
-        })
-        $('[title="'+clickedName+'"]').toggleClass('selected')
+        return
+      }
+      $('#ingredients span').removeClass('selected')
+      $(this).toggleClass("selected")
+      var noIngredient = _(recipes).filter(function(it) {
+        return _.isUndefined(_(it.ingredients).find(function(it) { return it.ingredient == clickedName }))
+      }).map(function(it) { return toClass(it.name) })
+      noIngredient.each(function(it) {
+        $("."+it).toggle(false)
       })
-      row.append(title)
+      $('[title="'+clickedName+'"]').toggleClass('selected')
     })
-    body.append(row)
 
     var listed = []
     var previous = null
@@ -107,7 +98,7 @@ $(function() {
             })
           }
         })
-        body.append(row)
+        $body.append(row)
       })(r)
     })
   })
