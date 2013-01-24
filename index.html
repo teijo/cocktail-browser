@@ -30,11 +30,13 @@
 <script id="row-template" type="text/x-handlebars-template">
   <div class="cocktail {{className}}">
     <span class="name">{{name}}</span>
-    {{#ingredients}}
-      {{#if offset}}
-        <span style="position: absolute; left: {{offset}}px; " title="{{ingredient}}" class="cl">{{cl}}</span>
-      {{/if}}
-    {{/ingredients}}
+    <div class="ingredients">
+      {{#ingredients}}
+        {{#if offset}}
+          <span style="position: absolute; left: {{offset}}px; " title="{{ingredient}}" class="cl">{{cl}}</span>
+        {{/if}}
+      {{/ingredients}}
+    </div>
     <span class="special">+ {{specials}}</span>
   </div>
 </script>
