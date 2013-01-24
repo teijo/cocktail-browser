@@ -1,3 +1,6 @@
+var COMMON_COUNT = 15
+var CELL_WIDTH = 50
+
 function toClass(string) {
   return string.toLowerCase().replace(/\W+/g, "-")
 }
@@ -8,12 +11,34 @@ function ingredientToString(ingredient) {
 
 $(function() {
   var $body = $("body")
-  var titleTmpl = Handlebars.compile($("#title-template").html())
-  var rowTmpl = Handlebars.compile($("#row-template").html())
-  var fullTmpl = Handlebars.compile($("#full-template").html())
 
-  var COMMON_COUNT = 15
-  var CELL_WIDTH = 50
+  var templating = (function() {
+    var titleTmpl = Handlebars.compile($("#title-template").html())
+    var rowTmpl = Handlebars.compile($("#row-template").html())
+    var fullTmpl = Handlebars.compile($("#full-template").html())
+
+    return {
+      row: function(r) {
+        var row = $(rowTmpl(r))
+        row.click(function() {
+          row.toggleClass('selected')
+          row.find('.all').toggle()
+          if (row.find('ul.images li').length == 0) {
+            var query = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+r.name+"%20cocktail%20drink&callback=?"
+            $.getJSON(query, function(response) {
+              r.images = _.pluck(response.responseData.results, 'tbUrl')
+              row.append(fullTmpl(r))
+            })
+          }
+        })
+        return row
+      },
+      title: function(ingredients) {
+        return titleTmpl(ingredients.first(COMMON_COUNT).value())
+      }
+    }
+  })()
+
   $.getJSON("iba-cocktails/recipes.json", function(recipes) {
     var correlation = {}
     _(recipes).each(function(r1) {
@@ -43,8 +68,8 @@ $(function() {
       .reverse()
       .map(function(ingredient, index) { var o = {}; return { name: ingredient[0], count: ingredient[1], position: index } })
 
-    var template = titleTmpl(ingredients.first(COMMON_COUNT).value())
-    $body.append(template)
+    $body.append(templating.title(ingredients))
+
     $('#ingredients > span').click(function() {
       var clickedName = $(this).text()
       $('div.cocktail').toggle(true)
@@ -85,19 +110,7 @@ $(function() {
       r.specials = specials.join(', ')
       r.className = toClass(r.name)
 
-      var row = $(rowTmpl(r))
-      row.click(function() {
-        row.toggleClass('selected')
-        row.find('.all').toggle()
-        if (row.find('ul.images li').length == 0) {
-          var query = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+r.name+"%20cocktail%20drink&callback=?"
-          $.getJSON(query, function(response) {
-            r.images = _.pluck(response.responseData.results, 'tbUrl')
-            row.append(fullTmpl(r))
-          })
-        }
-      })
-      $body.append(row)
+      $body.append(templating.row(r))
     })
   })
 })
