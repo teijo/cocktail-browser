@@ -90,6 +90,8 @@ $(function() {
 
     $body.append(templating.title(sortedIngredients))
 
+    var ingredientOrderMap = sortedIngredients.map(function(i) { return [i.name, i.position]}).object().value()
+
     $('#ingredients > span').click(function() {
       var clickedName = $(this).text()
       $('div.cocktail').toggle(true)
@@ -111,16 +113,19 @@ $(function() {
 
     var sortedRecipes = sortRecipes(recipes)
     _(sortedRecipes).each(function(r) {
+      r.ingredients = _(r.ingredients).map(function(i) {
+        if (i.ingredient)
+          i.offset = 100 + ingredientOrderMap[i.ingredient] * CELL_WIDTH
+        return i
+      }).value()
+
       var specials = []
       _(r.ingredients).each(function(ingredient) {
-        var offset = _(sortedIngredients).find(function(i) { return i.name === ingredient.ingredient })
-        if (offset !== undefined && offset.position < COMMON_COUNT)
-          ingredient.offset = 100+(offset.position)*CELL_WIDTH
-        else
+        if (ingredient.special || (ingredient.offset && ingredientOrderMap[ingredient.ingredient] >= COMMON_COUNT))
           specials.push(ingredientToString(ingredient))
       })
-
       r.specials = specials.join(', ')
+
       r.className = toClass(r.name)
 
       $body.append(templating.row(r))
