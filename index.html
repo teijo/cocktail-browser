@@ -37,7 +37,9 @@
         {{/if}}
       {{/ingredients}}
     </div>
-    <span class="special">+ {{specials}}</span>
+    {{#if specials}}
+      <span class="special">+ {{specials}}</span>
+    {{/if}}
   </div>
 </script>
 <script id="full-template" type="text/x-handlebars-template">
