@@ -39,7 +39,7 @@ $(function() {
     }
   })()
 
-  $.getJSON("iba-cocktails/recipes.json", function(recipes) {
+  function calculateCorrelation(recipes) {
     var correlation = {}
     _(recipes).each(function(r1) {
       var current = correlation[r1.name] = {}
@@ -57,6 +57,10 @@ $(function() {
         current[r2.name] = common
       })
     })
+    return correlation
+  }
+
+  $.getJSON("iba-cocktails/recipes.json", function(recipes) {
     var ingredients = _(recipes)
       .map(function(r) { return r.ingredients })
       .flatten()
@@ -91,6 +95,7 @@ $(function() {
 
     var listed = []
     var previous = null
+    var correlation = calculateCorrelation(recipes)
     _(recipes).each(function(r) {
       if (previous !== null) {
         r = _(recipes).filter(function(it) { return !_.contains(listed, it.name) }).max(function(it) { return correlation[previous.name][it.name] }).__wrapped__
