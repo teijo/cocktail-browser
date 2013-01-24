@@ -113,18 +113,14 @@ $(function() {
 
     var sortedRecipes = sortRecipes(recipes)
     _(sortedRecipes).each(function(r) {
-      r.ingredients = _(r.ingredients).map(function(i) {
-        if (i.ingredient)
-          i.offset = 100 + ingredientOrderMap[i.ingredient] * CELL_WIDTH
-        return i
-      }).value()
+      r.ingredients = _(r.ingredients)
+        .map(function(i) { if (i.ingredient) i.offset = 100 + ingredientOrderMap[i.ingredient] * CELL_WIDTH; return i })
+        .value()
 
-      var specials = []
-      _(r.ingredients).each(function(ingredient) {
-        if (ingredient.special || (ingredient.offset && ingredientOrderMap[ingredient.ingredient] >= COMMON_COUNT))
-          specials.push(ingredientToString(ingredient))
-      })
-      r.specials = specials.join(', ')
+      r.specials = _(r.ingredients)
+        .filter(function(i) { return (i.special || (i.offset && ingredientOrderMap[i.ingredient] >= COMMON_COUNT)) })
+        .map(ingredientToString)
+        .join(', ')
 
       r.className = toClass(r.name)
 
