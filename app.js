@@ -61,7 +61,7 @@ $(function() {
   }
 
   $.getJSON("iba-cocktails/recipes.json", function(recipes) {
-    var ingredients = _(recipes)
+    var sortedIngredients = _(recipes)
       .map(function(r) { return r.ingredients })
       .flatten()
       .filter(function(item) { return typeof(item.special) === "undefined" })
@@ -70,9 +70,9 @@ $(function() {
       .pairs()
       .sortBy(function(ingredient) { return ingredient[1] })
       .reverse()
-      .map(function(ingredient, index) { var o = {}; return { name: ingredient[0], count: ingredient[1], position: index } })
+      .map(function(ingredient, index) { return { name: ingredient[0], count: ingredient[1], position: index } })
 
-    $body.append(templating.title(ingredients))
+    $body.append(templating.title(sortedIngredients))
 
     $('#ingredients > span').click(function() {
       var clickedName = $(this).text()
@@ -105,7 +105,7 @@ $(function() {
 
       var specials = []
       _(r.ingredients).each(function(ingredient) {
-        var offset = _(ingredients).find(function(i) { return i.name === ingredient.ingredient })
+        var offset = _(sortedIngredients).find(function(i) { return i.name === ingredient.ingredient })
         if (offset !== undefined && offset.position < COMMON_COUNT)
           ingredient.offset = 100+(offset.position)*CELL_WIDTH
         else
