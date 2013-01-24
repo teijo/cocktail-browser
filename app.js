@@ -60,6 +60,22 @@ $(function() {
     return correlation
   }
 
+  function sortRecipes(recipes) {
+    var correlation = calculateCorrelation(recipes)
+    var listed = []
+    var previous = null
+    var result = []
+    _(recipes).each(function(r) {
+      if (previous !== null) {
+        r = _(recipes).filter(function(it) { return !_.contains(listed, it.name) }).max(function(it) { return correlation[previous.name][it.name] }).__wrapped__
+      }
+      previous = r
+      listed.push(r.name)
+      result.push(r)
+    })
+    return result
+  }
+
   $.getJSON("iba-cocktails/recipes.json", function(recipes) {
     var sortedIngredients = _(recipes)
       .map(function(r) { return r.ingredients })
@@ -93,16 +109,8 @@ $(function() {
       $('[title="'+clickedName+'"]').toggleClass('selected')
     })
 
-    var listed = []
-    var previous = null
-    var correlation = calculateCorrelation(recipes)
-    _(recipes).each(function(r) {
-      if (previous !== null) {
-        r = _(recipes).filter(function(it) { return !_.contains(listed, it.name) }).max(function(it) { return correlation[previous.name][it.name] }).__wrapped__
-      }
-      previous = r
-      listed.push(r.name)
-
+    var sortedRecipes = sortRecipes(recipes)
+    _(sortedRecipes).each(function(r) {
       var specials = []
       _(r.ingredients).each(function(ingredient) {
         var offset = _(sortedIngredients).find(function(i) { return i.name === ingredient.ingredient })
