@@ -9,8 +9,17 @@ function ingredientToString(ingredient) {
   return (ingredient.special !== undefined) ? ingredient.special : ingredient.cl+"cl "+ingredient.ingredient
 }
 
+function resize() {
+  var width = $(window).width()
+  var remainder = width % 50
+  $('#ingredients').css('width', width-remainder-300-100)
+  $('.ingredients').css('width', width-remainder-300)
+}
+
 $(function() {
   var $body = $("body")
+
+  $(window).resize(resize);
 
   var templating = (function() {
     var titleTmpl = Handlebars.compile($("#title-template").html())
@@ -34,7 +43,7 @@ $(function() {
         return row
       },
       title: function(ingredients) {
-        return titleTmpl(ingredients.first(COMMON_COUNT).value())
+        return titleTmpl(ingredients.value())
       }
     }
   })()
@@ -126,5 +135,7 @@ $(function() {
 
       $body.append(templating.row(r))
     })
+
+    resize()
   })
 })

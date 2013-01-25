@@ -14,13 +14,19 @@ div
   float: left
   position: relative
 
-#ingredients, #ingredientHeader
-  left: 100px
-
 #ingredientHeader
-  margin-top: 1em
-  width: 750px
+  width: 100%
+  overflow: hidden
+  clear: both
   text-align: center
+  height: 20px
+
+#ingredients
+  margin-top: 1em
+  left: 100px
+  width: 750px
+  height: 120px
+  overflow: hidden
 
 #ingredients
   > span
@@ -31,10 +37,10 @@ div
     display: block
     float: left
     overflow: hidden
+    &:not(:nth-child(2))
+      border-left: none
     &:hover
       background-color: #FEE
-    &:not(:last-child)
-      border-right: none
     &.selected
       background-color: #FCC
       border-bottom: none
@@ -85,10 +91,11 @@ div.cocktail
     text-align: left
     border: none
   span.special
-    left: 850px
+    display: block
+    width: 300px
+    right: 0px
     position: absolute
     text-align: left
-    width: auto
     border: none
   &.selected
     border: 1px solid #CCC
