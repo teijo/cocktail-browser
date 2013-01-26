@@ -37,6 +37,7 @@ $(function() {
           if (!$row.find('ul.images li').length) {
             var query = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+r.name+"%20cocktail%20drink&callback=?"
             Bacon.fromPromise($.getJSON(query))
+              .filter(function(response) { return response.responseData != null })
               .map(function(response) { return _(response.responseData.results).pluck('tbUrl') })
               .onValue(function(thumbUrls) {
                 var thumbStream = new Bacon.Bus()
