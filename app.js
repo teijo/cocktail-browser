@@ -38,7 +38,7 @@ $(function() {
             var query = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+r.name+"%20cocktail%20drink&callback=?"
             var images = Bacon.fromPromise($.getJSON(query))
             images.onValue(function(response) {
-              $row.find('.all').append(imageTmpl(_.pluck(response.responseData.results, 'tbUrl')))
+              $row.find('div.images').replaceWith(imageTmpl(_.pluck(response.responseData.results, 'tbUrl')))
             })
           }
         })
