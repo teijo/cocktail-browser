@@ -84,7 +84,8 @@ $(function() {
     return result
   }
 
-  $.getJSON("iba-cocktails/recipes.json", function(recipes) {
+  var recipeData = Bacon.fromPromise($.ajax('iba-cocktails/recipes.json'))
+  recipeData.onValue(function(recipes) {
     var sortedIngredients = _(recipes)
       .map(function(r) { return r.ingredients })
       .flatten()
