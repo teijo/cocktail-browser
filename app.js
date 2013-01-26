@@ -1,4 +1,3 @@
-var COMMON_COUNT = 15
 var CELL_WIDTH = 50
 
 function toClass(string) {
@@ -12,8 +11,8 @@ function ingredientToString(ingredient) {
 function resize() {
   var width = $(window).width()
   var remainder = width % 50
-  $('#ingredients').css('width', width-remainder-300-100)
-  $('.ingredients').css('width', width-remainder-300)
+  $('#ingredients').css('width', width-remainder-100)
+  $('.ingredients').css('width', width-remainder)
 }
 
 $(function() {
@@ -125,11 +124,6 @@ $(function() {
       r.ingredients = _(r.ingredients)
         .map(function(i) { if (i.ingredient) i.offset = 100 + ingredientOrderMap[i.ingredient] * CELL_WIDTH; return i })
         .value()
-
-      r.specials = _(r.ingredients)
-        .filter(function(i) { return (i.special || (i.offset && ingredientOrderMap[i.ingredient] >= COMMON_COUNT)) })
-        .map(ingredientToString)
-        .join(', ')
 
       r.className = toClass(r.name)
 

@@ -44,7 +44,7 @@ div
     &.selected
       background-color: #FCC
       border-bottom: none
-      border-right: 1px solid
+      border-left: 1px solid
       border-color: #C60
     > span
       font-size: 14px
@@ -90,13 +90,6 @@ div.cocktail
     overflow: hidden
     text-align: left
     border: none
-  span.special
-    display: block
-    width: 300px
-    right: 0px
-    position: absolute
-    text-align: left
-    border: none
   &.selected
     border: 1px solid #CCC
     border-left: none
@@ -106,7 +99,7 @@ div.cocktail
     .name
       width: auto
     span
-      &.cl, &.special
+      &.cl
         display: none
     &:hover
       background-color: transparent
