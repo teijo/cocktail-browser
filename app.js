@@ -18,7 +18,7 @@ function resize() {
 $(function() {
   var $body = $("body")
 
-  $(window).resize(resize);
+  $(window).asEventStream('resize').throttle(300).onValue(resize)
 
   var templating = (function() {
     var titleTmpl = Handlebars.compile($("#title-template").html())
