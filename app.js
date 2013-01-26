@@ -28,21 +28,21 @@ $(function() {
 
     return {
       row: function(r) {
-        var row = $(rowTmpl(r))
-        row.asEventStream('click').onValue(function() {
-          row.toggleClass('selected')
-          row.find('.all').toggle()
-          if (!row.find('.all').length)
-            row.append(fullTmpl(r))
-          if (!row.find('ul.images li').length) {
+        var $row = $(rowTmpl(r))
+        $row.asEventStream('click').onValue(function() {
+          $row.toggleClass('selected')
+          $row.find('.all').toggle()
+          if (!$row.find('.all').length)
+            $row.append(fullTmpl(r))
+          if (!$row.find('ul.images li').length) {
             var query = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+r.name+"%20cocktail%20drink&callback=?"
             var images = Bacon.fromPromise($.getJSON(query))
             images.onValue(function(response) {
-              row.find('.all').append(imageTmpl(_.pluck(response.responseData.results, 'tbUrl')))
+              $row.find('.all').append(imageTmpl(_.pluck(response.responseData.results, 'tbUrl')))
             })
           }
         })
-        return row
+        return $row
       },
       title: function(ingredients) {
         return titleTmpl(ingredients.value())
