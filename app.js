@@ -36,21 +36,19 @@ $(function() {
             $row.append(fullTmpl(r))
           if (!$row.find('ul.images li').length) {
             var query = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+r.name+"%20cocktail%20drink&callback=?"
-            Bacon.fromPromise($.getJSON(query)).onValue(function(response) {
-              var thumbStream = new Bacon.Bus()
-              var thumbCount = _(response.responseData.results)
-                .pluck('tbUrl')
-                .each(function(it) {
+            Bacon.fromPromise($.getJSON(query))
+              .map(function(response) { return _(response.responseData.results).pluck('tbUrl') })
+              .onValue(function(thumbUrls) {
+                var thumbStream = new Bacon.Bus()
+                thumbUrls.each(function(it) {
                   var img = new Image()
                   img.onload = function() { thumbStream.push(it) }
                   img.src = it
                 })
-                .size()
-              thumbStream.bufferWithCount(thumbCount)
-                .onValue(function(bufferedImages) {
+                thumbStream.bufferWithCount(thumbUrls.size()).onValue(function(bufferedImages) {
                   $row.find('div.images').replaceWith(imageTmpl(bufferedImages))
                 })
-            })
+              })
           }
         })
         return $row
