@@ -1,7 +1,7 @@
 <html>
 <head>
-<script type="text/javascript" src="lib/Bacon-1ab32ffb.min.js"></script>
 <script type="text/javascript" src="lib/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="lib/Bacon-1ab32ffb.min.js"></script>
 <script type="text/javascript" src="lib/lodash-v1.0.0-rc.3.min.js"></script>
 <script type="text/javascript" src="lib/handlebars-1.0.rc.2.js"></script>
 <script type="text/javascript" src="lib/live.js"></script>
@@ -53,12 +53,14 @@
       {{/ingredients}}
     </ul>
     <div class="preparation">{{preparation}}</div>
-    <ul class="images">
-      {{#each images}}
-        <li><img src="{{this}}" /></li>
-      {{/each}}
-    </ul>
   </div>
+</script>
+<script id="image-template" type="text/x-handlebars-template">
+  <ul class="images">
+    {{#each this}}
+      <li><img src="{{this}}" /></li>
+    {{/each}}
+  </ul>
 </script>
 </head>
 <body>

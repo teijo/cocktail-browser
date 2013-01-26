@@ -24,18 +24,21 @@ $(function() {
     var titleTmpl = Handlebars.compile($("#title-template").html())
     var rowTmpl = Handlebars.compile($("#row-template").html())
     var fullTmpl = Handlebars.compile($("#full-template").html())
+    var imageTmpl = Handlebars.compile($("#image-template").html())
 
     return {
       row: function(r) {
         var row = $(rowTmpl(r))
-        row.click(function() {
+        row.asEventStream('click').onValue(function() {
           row.toggleClass('selected')
           row.find('.all').toggle()
-          if (row.find('ul.images li').length == 0) {
+          if (!row.find('.all').length)
+            row.append(fullTmpl(r))
+          if (!row.find('ul.images li').length) {
             var query = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+r.name+"%20cocktail%20drink&callback=?"
-            $.getJSON(query, function(response) {
-              r.images = _.pluck(response.responseData.results, 'tbUrl')
-              row.append(fullTmpl(r))
+            var images = Bacon.fromPromise($.getJSON(query))
+            images.onValue(function(response) {
+              row.find('.all').append(imageTmpl(_.pluck(response.responseData.results, 'tbUrl')))
             })
           }
         })
