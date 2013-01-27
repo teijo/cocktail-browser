@@ -114,7 +114,7 @@ $(function() {
 
     var ingredientOrderMap = sortedIngredients.map(function(i) { return [i.name, i.position]}).object().value()
 
-    $('#ingredients > span').click(function() {
+    $('#ingredients > span').asEventStream('click').onValue(function() {
       var clickedName = $(this).text()
       $('div.cocktail').toggle(true)
       $('span.cl, li').toggleClass('selected', false)
