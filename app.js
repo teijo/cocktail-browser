@@ -114,23 +114,26 @@ $(function() {
 
     var ingredientOrderMap = sortedIngredients.map(function(i) { return [i.name, i.position]}).object().value()
 
-    $('#ingredients > span').asEventStream('click').onValue(function() {
-      var clickedName = $(this).text()
-      $('div.cocktail').toggle(true)
-      $('span.cl, li').toggleClass('selected', false)
-      if ($(this).hasClass("selected")) {
-        $(this).toggleClass("selected")
-        return
-      }
-      $('#ingredients span').removeClass('selected')
-      $(this).toggleClass("selected")
-      var noIngredient = _(recipes).filter(function(it) {
-        return _.isUndefined(_(it.ingredients).find(function(it) { return it.ingredient == clickedName }))
-      }).map(function(it) { return toClass(it.name) })
-      noIngredient.each(function(it) {
-        $("."+it).toggle(false)
+    $('#ingredients > span').each(function(i, el) {
+      var $el = $(el)
+      $el.asEventStream('click').onValue(function() {
+        var clickedName = $el.text()
+        $('div.cocktail').toggle(true)
+        $('span.cl, li').toggleClass('selected', false)
+        if ($el.hasClass("selected")) {
+          $el.toggleClass("selected")
+          return
+        }
+        $('#ingredients span').removeClass('selected')
+        $el.toggleClass("selected")
+        var noIngredient = _(recipes).filter(function(it) {
+          return _.isUndefined(_(it.ingredients).find(function(it) { return it.ingredient == clickedName }))
+        }).map(function(it) { return toClass(it.name) })
+        noIngredient.each(function(it) {
+          $("."+it).toggle(false)
+        })
+        $('[title="'+clickedName+'"]').toggleClass('selected')
       })
-      $('[title="'+clickedName+'"]').toggleClass('selected')
     })
 
     var sortedRecipes = sortRecipes(recipes)
