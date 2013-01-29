@@ -15,6 +15,24 @@ function resize() {
   $('.ingredients').css('width', width-remainder)
 }
 
+function selectIngredient($button, name, recipes) {
+  $('div.cocktail').toggle(true)
+  $('span.cl, li').toggleClass('selected', false)
+  if ($button.hasClass("selected")) {
+    $button.toggleClass("selected")
+    return
+  }
+  $('#ingredients span').removeClass('selected')
+  $button.toggleClass("selected")
+  var noIngredient = _(recipes).filter(function(it) {
+    return _.isUndefined(_(it.ingredients).find(function(it) { return it.ingredient == name }))
+  }).map(function(it) { return toClass(it.name) })
+  noIngredient.each(function(it) {
+    $("."+it).toggle(false)
+  })
+  $('[title="'+name+'"]').toggleClass('selected')
+}
+
 $(function() {
   var $body = $("body")
 
@@ -117,22 +135,7 @@ $(function() {
     $('#ingredients > span').each(function(i, el) {
       var $el = $(el)
       $el.asEventStream('click').onValue(function() {
-        var clickedName = $el.text()
-        $('div.cocktail').toggle(true)
-        $('span.cl, li').toggleClass('selected', false)
-        if ($el.hasClass("selected")) {
-          $el.toggleClass("selected")
-          return
-        }
-        $('#ingredients span').removeClass('selected')
-        $el.toggleClass("selected")
-        var noIngredient = _(recipes).filter(function(it) {
-          return _.isUndefined(_(it.ingredients).find(function(it) { return it.ingredient == clickedName }))
-        }).map(function(it) { return toClass(it.name) })
-        noIngredient.each(function(it) {
-          $("."+it).toggle(false)
-        })
-        $('[title="'+clickedName+'"]').toggleClass('selected')
+        selectIngredient($el, $el.text(), recipes)
       })
     })
 
