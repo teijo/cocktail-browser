@@ -15,6 +15,11 @@ function resize() {
   $('.ingredients').css('width', width-remainder)
 }
 
+function toggleHighlight($el, name, state) {
+  var match = $el.find('[title="'+name+'"]')
+  match.toggleClass('selected', state)
+}
+
 var selected = _([])
 
 function highlightCocktails(recipes) {
@@ -34,11 +39,12 @@ function highlightCocktails(recipes) {
 }
 
 function selectIngredient($button, name, recipes) {
-  if ($button.hasClass('selected'))
+  var isSelected = $button.hasClass('selected')
+  if (isSelected)
     selected = selected.reject(function(it) { return name == it })
   else
     selected.push(name)
-  $('span.cl[title="'+name+'"]').toggleClass('selected')
+  toggleHighlight($('body'), name, !isSelected)
   $button.toggleClass("selected")
   highlightCocktails(recipes)
 }
@@ -60,8 +66,10 @@ $(function() {
         $row.asEventStream('click').onValue(function() {
           $row.toggleClass('selected')
           $row.find('.all').toggle()
-          if (!$row.find('.all').length)
+          if (!$row.find('.all').length) {
             $row.append(fullTmpl(r))
+            selected.each(function(it) { toggleHighlight($row.find('.all'), it, true) })
+          }
           if (!$row.find('ul.images li').length) {
             var query = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+r.name+"%20cocktail%20drink&callback=?"
             Bacon.fromPromise($.getJSON(query))
