@@ -15,22 +15,32 @@ function resize() {
   $('.ingredients').css('width', width-remainder)
 }
 
-function selectIngredient($button, name, recipes) {
-  $('div.cocktail').toggle(true)
-  $('span.cl, li').toggleClass('selected', false)
-  if ($button.hasClass("selected")) {
-    $button.toggleClass("selected")
-    return
-  }
-  $('#ingredients span').removeClass('selected')
-  $button.toggleClass("selected")
-  var noIngredient = _(recipes).filter(function(it) {
-    return _.isUndefined(_(it.ingredients).find(function(it) { return it.ingredient == name }))
-  }).map(function(it) { return toClass(it.name) })
-  noIngredient.each(function(it) {
-    $("."+it).toggle(false)
+var selected = _([])
+
+function highlightCocktails(recipes) {
+  _(recipes).each(function(it) {
+    var total = it.ingredients.length
+    var found = _.filter(it.ingredients, function(it) { return selected.contains(it.ingredient) }).length
+    var $title = $(".cocktail."+it.className+" .name")
+
+    $title.removeClass("hasSome").removeClass("hasHalf").removeClass("hasAll")
+    if (found === total)
+      $title.addClass("hasAll")
+    else if (found / total > 0.6)
+      $title.addClass("hasHalf")
+    else if (found / total > 0.3)
+      $title.addClass("hasSome")
   })
-  $('[title="'+name+'"]').toggleClass('selected')
+}
+
+function selectIngredient($button, name, recipes) {
+  if ($button.hasClass('selected'))
+    selected = selected.reject(function(it) { return name == it })
+  else
+    selected.push(name)
+  $('span.cl[title="'+name+'"]').toggleClass('selected')
+  $button.toggleClass("selected")
+  highlightCocktails(recipes)
 }
 
 $(function() {

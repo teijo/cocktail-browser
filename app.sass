@@ -43,9 +43,6 @@ div
       background-color: #FEE
     &.selected
       background-color: #FCC
-      border-bottom: none
-      border-left: 1px solid
-      border-color: #C60
     > span
       font-size: 14px
       cursor: pointer
@@ -79,25 +76,27 @@ div.cocktail
     &.cl
       font-size: 20px
       &.selected
+        border: none
         background-color: #FEE
-        border-color: #C60
-        border-top: none
-      &.selected:not:last
-        border-bottom: none
   .name
     padding-left: 1em
     width: 100px
     overflow: hidden
     text-align: left
     border: none
+    &.hasSome
+      background-color: #FCC
+    &.hasHalf
+      background-color: #FF9
+    &.hasAll
+      background-color: #6C6
+      font-weight: bold
   &.selected
     border: 1px solid #CCC
     border-left: none
     border-right: none
     +box-sizing(border-box)
   &.selected
-    .name
-      width: auto
     span
       &.cl
         display: none
