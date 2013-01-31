@@ -1,6 +1,7 @@
 @import "compass/reset"
 @import "compass/css3/transform"
 @import "compass/css3/box-sizing"
+@import "compass/css3/transition"
 
 body
   overflow-x: hidden
@@ -100,11 +101,16 @@ div.cocktail
     span
       &.cl
         display: none
+    div.all
+      max-height: 500px
     &:hover
       background-color: transparent
 
 div.all
   display: block
+  max-height: 0
+  overflow: hidden
+  @include transition(max-height 0.22s)
   img
     max-height: 140px
     max-width: 140px
