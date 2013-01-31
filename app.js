@@ -24,7 +24,7 @@ var selected = _([])
 
 function highlightCocktails(recipes) {
   _(recipes).each(function(it) {
-    var $title = $(".cocktail."+it.className+" .name")
+    $title = it.template.find(".name")
     $title.removeClass("hasSome").removeClass("hasHalf").removeClass("hasAll")
     if (it.weight == 1.0)
       $title.addClass("hasAll")
@@ -47,7 +47,7 @@ function reorderByWeight(recipes, selected) {
   var sortedByWeight = _.sortBy(recipes, selected.size() ? 'weight' : 'originalOrder').reverse()
   var $body = $('body')
   _.each(sortedByWeight, function(it) {
-    $body.append($('div.cocktail.'+toClass(it.name)))
+    $body.append(it.template)
   })
 }
 
@@ -181,8 +181,8 @@ $(function() {
         .value()
 
       r.className = toClass(r.name)
-
-      $body.append(templating.row(r))
+      r.template = templating.row(r)
+      $body.append(r.template)
     })
 
     resize()
