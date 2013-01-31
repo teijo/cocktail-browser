@@ -24,17 +24,22 @@ var selected = _([])
 
 function highlightCocktails(recipes) {
   _(recipes).each(function(it) {
+    var $title = $(".cocktail."+it.className+" .name")
+    $title.removeClass("hasSome").removeClass("hasHalf").removeClass("hasAll")
+    if (it.weight == 1.0)
+      $title.addClass("hasAll")
+    else if (it.weight > 0.6)
+      $title.addClass("hasHalf")
+    else if (it.weight > 0.3)
+      $title.addClass("hasSome")
+  })
+}
+
+function calculateWeight(recipes, selected) {
+  _(recipes).each(function(it) {
     var total = it.ingredients.length
     var found = _.filter(it.ingredients, function(it) { return selected.contains(it.ingredient) }).length
-    var $title = $(".cocktail."+it.className+" .name")
-
-    $title.removeClass("hasSome").removeClass("hasHalf").removeClass("hasAll")
-    if (found === total)
-      $title.addClass("hasAll")
-    else if (found / total > 0.6)
-      $title.addClass("hasHalf")
-    else if (found / total > 0.3)
-      $title.addClass("hasSome")
+    it.weight = found / total
   })
 }
 
@@ -46,6 +51,7 @@ function selectIngredient($button, name, recipes) {
     selected.push(name)
   toggleHighlight($('body'), name, !isSelected)
   $button.toggleClass("selected")
+  calculateWeight(recipes, selected)
   highlightCocktails(recipes)
 }
 
