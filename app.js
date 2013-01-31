@@ -43,8 +43,8 @@ function calculateWeight(recipes, selected) {
   })
 }
 
-function reorderByWeight(recipes) {
-  var sortedByWeight = _.sortBy(recipes, 'weight').reverse()
+function reorderByWeight(recipes, selected) {
+  var sortedByWeight = _.sortBy(recipes, selected.size() ? 'weight' : 'originalOrder').reverse()
   var $body = $('body')
   _.each(sortedByWeight, function(it) {
     $body.append($('div.cocktail.'+toClass(it.name)))
@@ -61,7 +61,7 @@ function selectIngredient($button, name, recipes) {
   $button.toggleClass("selected")
   calculateWeight(recipes, selected)
   highlightCocktails(recipes)
-  reorderByWeight(recipes)
+  reorderByWeight(recipes, selected)
 }
 
 $(function() {
@@ -137,12 +137,14 @@ $(function() {
     var listed = []
     var previous = null
     var result = []
+    var weight = recipes.length
     _(recipes).each(function(r) {
       if (previous !== null) {
         r = _(recipes).filter(function(it) { return !_.contains(listed, it.name) }).max(function(it) { return correlation[previous.name][it.name] }).__wrapped__
       }
       previous = r
       listed.push(r.name)
+      r.originalOrder = --weight
       result.push(r)
     })
     return result
