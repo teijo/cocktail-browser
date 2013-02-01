@@ -143,7 +143,7 @@ $(function() {
     var weight = _recipes.size()
     _recipes.each(function(r) {
       if (previous !== null) {
-        r = _recipes.filter(function(it) { return !_.contains(listed, it.name) }).max(function(it) { return correlation[previous.name][it.name] }).__wrapped__
+        r = _recipes.filter(function(it) { return !_.contains(listed, it.name) }).max(function(it) { return correlation[previous.name][it.name] }).value()
       }
       previous = r
       listed.push(r.name)
