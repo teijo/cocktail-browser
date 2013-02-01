@@ -79,12 +79,15 @@ $(function() {
       row: function(r) {
         var $row = $(rowTmpl(r))
         $row.asEventStream('click').onValue(function() {
-          $row.toggleClass('selected')
-          $row.find('.all').toggle()
           if (!$row.find('.all').length) {
             $row.append(fullTmpl(r))
             selected.each(function(it) { toggleHighlight($row.find('.all'), it, true) })
           }
+          // setTimeout so that append can finish before using .selected
+          // to open the appended row
+          setTimeout(function() {
+            $row.toggleClass('selected')
+          }, 0)
           if (!$row.find('ul.images li').length) {
             var query = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+r.name+"%20cocktail%20drink&callback=?"
             Bacon.fromPromise($.getJSON(query))
