@@ -49,7 +49,7 @@
     <ul class="ingredients">
       {{#ingredients}}
         {{#if cl}}
-          <li title="{{ingredient}}">{{cl}}cl {{ingredient}}</li>
+          <li title="{{ingredient}}">{{cl}}cl {{#if label }}{{label}} ({{ingredient}}){{else}}{{ingredient}}{{/if}}</li>
         {{else}}
           <li>{{special}}</li>
         {{/if}}
