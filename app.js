@@ -20,10 +20,10 @@ function toggleHighlight($el, name, state) {
   match.toggleClass('selected', state)
 }
 
-var selected = _([])
+var _selected = _([])
 
-function highlightCocktails(recipes) {
-  _(recipes).each(function(it) {
+function highlightCocktails(_recipes) {
+  _recipes.each(function(it) {
     $title = it.template.find(".name")
     $title.removeClass("hasSome").removeClass("hasHalf").removeClass("hasAll")
     if (it.weight == 1.0)
@@ -35,33 +35,33 @@ function highlightCocktails(recipes) {
   })
 }
 
-function calculateWeight(recipes, selected) {
-  _(recipes).each(function(it) {
+function calculateWeight(_recipes, _selected) {
+  _recipes.each(function(it) {
     var total = it.ingredients.length
-    var found = _.filter(it.ingredients, function(it) { return selected.contains(it.ingredient) }).length
+    var found = _.filter(it.ingredients, function(it) { return _selected.contains(it.ingredient) }).length
     it.weight = found / total
   })
 }
 
-function reorderByWeight(recipes, selected) {
-  var sortedByWeight = _.sortBy(recipes, selected.size() ? 'weight' : 'originalOrder').reverse()
+function reorderByWeight(_recipes, _selected) {
+  var _sortedByWeight = _recipes.sortBy(_selected.size() ? 'weight' : 'originalOrder').reverse()
   var $body = $('body')
-  _.each(sortedByWeight, function(it) {
+  _sortedByWeight.each(function(it) {
     $body.append(it.template)
   })
 }
 
-function selectIngredient($button, name, recipes) {
+function selectIngredient($button, name, _recipes) {
   var isSelected = $button.hasClass('selected')
   if (isSelected)
-    selected = selected.reject(function(it) { return name == it })
+    _selected = _selected.reject(function(it) { return name == it })
   else
-    selected.push(name)
+    _selected.push(name)
   toggleHighlight($('body'), name, !isSelected)
   $button.toggleClass("selected")
-  calculateWeight(recipes, selected)
-  highlightCocktails(recipes)
-  reorderByWeight(recipes, selected)
+  calculateWeight(_recipes, _selected)
+  highlightCocktails(_recipes)
+  reorderByWeight(_recipes, _selected)
 }
 
 $(function() {
@@ -81,7 +81,7 @@ $(function() {
         $row.asEventStream('click').onValue(function() {
           if (!$row.find('.all').length) {
             $row.append(fullTmpl(r))
-            selected.each(function(it) { toggleHighlight($row.find('.all'), it, true) })
+            _selected.each(function(it) { toggleHighlight($row.find('.all'), it, true) })
           }
           // setTimeout so that append can finish before using .selected
           // to open the appended row
@@ -114,11 +114,11 @@ $(function() {
     }
   })()
 
-  function calculateCorrelation(recipes) {
+  function calculateCorrelation(_recipes) {
     var correlation = {}
-    _(recipes).each(function(r1) {
+    _recipes.each(function(r1) {
       var current = correlation[r1.name] = {}
-      _(recipes).filter(function(it) { return it != r1 }).each(function(r2) {
+      _recipes.filter(function(it) { return it != r1 }).each(function(r2) {
         var common = 0
         _(r1.ingredients)
           .filter(function(it) { return it.ingredient !== undefined })
@@ -135,27 +135,28 @@ $(function() {
     return correlation
   }
 
-  function sortRecipes(recipes) {
-    var correlation = calculateCorrelation(recipes)
+  function sortRecipes(_recipes) {
+    var correlation = calculateCorrelation(_recipes)
     var listed = []
     var previous = null
-    var result = []
-    var weight = recipes.length
-    _(recipes).each(function(r) {
+    var _result = _([])
+    var weight = _recipes.size()
+    _recipes.each(function(r) {
       if (previous !== null) {
-        r = _(recipes).filter(function(it) { return !_.contains(listed, it.name) }).max(function(it) { return correlation[previous.name][it.name] }).__wrapped__
+        r = _recipes.filter(function(it) { return !_.contains(listed, it.name) }).max(function(it) { return correlation[previous.name][it.name] }).__wrapped__
       }
       previous = r
       listed.push(r.name)
       r.originalOrder = --weight
-      result.push(r)
+      _result.push(r)
     })
-    return result
+    return _result
   }
 
   var recipeData = Bacon.fromPromise($.getJSON('iba-cocktails/recipes.json'))
   recipeData.onValue(function(recipes) {
-    var sortedIngredients = _(recipes)
+    var _recipes = _(recipes)
+    var sortedIngredients = _recipes
       .map(function(r) { return r.ingredients })
       .flatten()
       .filter(function(item) { return typeof(item.special) === "undefined" })
@@ -173,12 +174,12 @@ $(function() {
     $('#ingredients > span').each(function(i, el) {
       var $el = $(el)
       $el.asEventStream('click').onValue(function() {
-        selectIngredient($el, $el.text(), recipes)
+        selectIngredient($el, $el.text(), _recipes)
       })
     })
 
-    var sortedRecipes = sortRecipes(recipes)
-    _(sortedRecipes).each(function(r) {
+    var _sortedRecipes = sortRecipes(_recipes)
+    _sortedRecipes.each(function(r) {
       r.ingredients = _(r.ingredients)
         .map(function(i) { if (i.ingredient) i.offset = 100 + ingredientOrderMap[i.ingredient] * CELL_WIDTH; return i })
         .value()
