@@ -74,6 +74,7 @@ $(function() {
     var rowTmpl = Handlebars.compile($("#row-template").html())
     var fullTmpl = Handlebars.compile($("#full-template").html())
     var imageTmpl = Handlebars.compile($("#image-template").html())
+    var searchTmpl = Handlebars.compile($("#search-template").html())
 
     return {
       row: function(r) {
@@ -118,6 +119,9 @@ $(function() {
       },
       title: function(ingredients) {
         return titleTmpl(ingredients.value())
+      },
+      search: function(ingredients) {
+        return searchTmpl(ingredients.value())
       }
     }
   })()
@@ -175,6 +179,9 @@ $(function() {
       .reverse()
       .map(function(ingredient, index) { return { name: ingredient[0], count: ingredient[1], position: index } })
 
+
+    $body.append(templating.search(sortedIngredients))
+    $('#search').chosen()
     $body.append(templating.title(sortedIngredients))
 
     var ingredientOrderMap = sortedIngredients.map(function(i) { return [i.name, i.position]}).object().value()
