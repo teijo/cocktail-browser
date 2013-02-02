@@ -100,9 +100,17 @@ $(function() {
                   img.onload = function() { thumbStream.push(it) }
                   img.src = it
                 })
-                thumbStream.bufferWithCount(thumbUrls.size()).onValue(function(bufferedImages) {
-                  $row.find('div.images').replaceWith(imageTmpl(bufferedImages))
-                })
+                thumbStream
+                  .scan(0, function(a) { return a+1 })
+                  .onValue(function(imagesLoaded) {
+                    $row.find('div.images div.bar').css('width', (25 * imagesLoaded)+'%')
+                  })
+                thumbStream
+                  .delay(100)
+                  .bufferWithCount(thumbUrls.size())
+                  .onValue(function(bufferedImages) {
+                    $row.find('div.images').replaceWith(imageTmpl(bufferedImages))
+                  })
               })
           }
         })

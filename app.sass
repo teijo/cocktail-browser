@@ -126,8 +126,18 @@ div.all
         position: absolute
         left: -1em
   div.images
+    position: relative
     font-style: italic
     margin: 0 1em 1em 1em
+    width: 300px
+    border: 1px solid #CCC
+    padding: 2px
+    +box-sizing(border-box)
+    div.bar
+      position: relative
+      width: 0%
+      background-color: #EEE
+      @include transition(width 0.2s)
   ul.images
     float: left
     clear: left
