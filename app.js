@@ -194,6 +194,7 @@ $(function() {
     $body.append(templating.title(sortedIngredients))
 
     var $search = $('#search').chosen()
+    $('#search_chzn, #search_chzn .chzn-drop, #search_chzn input').css('width', '100%')
     $search.asEventStream('change')
       .onValue(function() {
         _selected = _($search.val())
