@@ -65,7 +65,6 @@ function updateHighlight(_recipes, _selected) {
 
 function syncOptions($select, _selected) {
   $select.find('option').map(function(i, e) { return $(e) }).each(function(i, e) {
-    console.log(e.attr('value'))
     if (_selected.contains(e.attr('value')))
       e.attr('selected', 'selected')
     else
