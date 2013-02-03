@@ -193,12 +193,19 @@ $(function() {
     $body.append(templating.title(sortedIngredients))
 
     var $search = $('#search').chosen()
-    $('#search_chzn, #search_chzn .chzn-drop, #search_chzn input').css('width', '100%')
+    $('#search_chzn, #search_chzn .chzn-drop, #search_chzn input').css('width', '90%')
     $search.asEventStream('change')
       .onValue(function() {
         _selected = _($search.val())
         updateHighlight(_recipes, _selected)
       })
+
+    var $clear = $('#clear')
+    $clear.asEventStream('click').onValue(function() {
+      _selected = _([])
+      updateHighlight(_recipes, _selected)
+      syncOptions($search, _selected)
+    })
 
     var ingredientOrderMap = sortedIngredients.map(function(i) { return [i.name, i.position]}).object().value()
 
