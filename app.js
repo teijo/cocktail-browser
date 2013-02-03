@@ -51,17 +51,27 @@ function reorderByWeight(_recipes, _selected) {
   })
 }
 
-function selectIngredient($button, name, _recipes) {
-  var isSelected = $button.hasClass('selected')
-  if (isSelected)
-    _selected = _selected.reject(function(it) { return name == it })
-  else
-    _selected.push(name)
-  toggleHighlight($('body'), name, !isSelected)
-  $button.toggleClass("selected")
+function updateHighlight(_recipes, _selected) {
+  $('span.ingredient').map(function(i, e) { return $(e) }).each(function(i, e) {
+    var name = e.attr('title')
+    var state = _selected.contains(name)
+    toggleHighlight($('body'), name, state)
+    e.toggleClass('selected', state)
+  })
   calculateWeight(_recipes, _selected)
   highlightCocktails(_recipes)
   reorderByWeight(_recipes, _selected)
+}
+
+function syncOptions($select, _selected) {
+  $select.find('option').map(function(i, e) { return $(e) }).each(function(i, e) {
+    console.log(e.attr('value'))
+    if (_selected.contains(e.attr('value')))
+      e.attr('selected', 'selected')
+    else
+      e.removeAttr('selected')
+  })
+  $select.trigger("liszt:updated")
 }
 
 $(function() {
@@ -181,15 +191,27 @@ $(function() {
 
 
     $body.append(templating.search(sortedIngredients))
-    $('#search').chosen()
     $body.append(templating.title(sortedIngredients))
+
+    var $search = $('#search').chosen()
+    $search.asEventStream('change')
+      .onValue(function() {
+        _selected = _($search.val())
+        updateHighlight(_recipes, _selected)
+      })
 
     var ingredientOrderMap = sortedIngredients.map(function(i) { return [i.name, i.position]}).object().value()
 
     $('#ingredients > span').each(function(i, el) {
       var $el = $(el)
       $el.asEventStream('click').onValue(function() {
-        selectIngredient($el, $el.text(), _recipes)
+        var name = $el.text()
+        if (_selected.contains(name))
+          _selected = _selected.reject(function(it) { return it === name })
+        else
+          _selected.push(name)
+        updateHighlight(_recipes, _selected)
+        syncOptions($search, _selected)
       })
     })
 
