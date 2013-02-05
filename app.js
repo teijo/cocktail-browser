@@ -179,13 +179,13 @@ $(function() {
 
   function extendRecipes(_recipes, sortedIngredients) {
     var ingredientOrderMap = sortedIngredients.map(function(i) { return [i.name, i.position]}).object().value()
-    return sortRecipes(_recipes).map(function(r) {
-      return _.assign(r, {
-        ingredients: _(r.ingredients)
+    return sortRecipes(_recipes).map(function(it) {
+      return _.assign(it, {
+        ingredients: _(it.ingredients)
           .map(function(i) { if (i.ingredient) i.offset = 100 + ingredientOrderMap[i.ingredient] * CELL_WIDTH; return i })
           .value(),
-        className: toClass(r.name),
-        template: templating.row(r)
+        className: toClass(it.name),
+        template: templating.row(it)
       })
     })
   }
@@ -194,7 +194,7 @@ $(function() {
   recipeData.onValue(function(recipes) {
     var _recipes = _(recipes)
     var sortedIngredients = _recipes
-      .map(function(r) { return r.ingredients })
+      .map(function(it) { return it.ingredients })
       .flatten()
       .filter(function(item) { return typeof(item.special) === "undefined" })
       .map(function(item) { return item.ingredient })
@@ -208,7 +208,7 @@ $(function() {
 
     $body.append(templating.search(sortedIngredients))
     $body.append(templating.title(sortedIngredients))
-    _recipes.each(function(r) { $body.append(r.template) })
+    _recipes.each(function(it) { $body.append(it.template) })
 
     var $search = $('#search').chosen()
 
