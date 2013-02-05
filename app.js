@@ -20,8 +20,6 @@ function toggleHighlight($el, name, state) {
   match.toggleClass('selected', state)
 }
 
-var _selected = _([])
-
 function highlightCocktails(_recipes) {
   _recipes.each(function(it) {
     $title = it.template.find(".name")
@@ -91,7 +89,10 @@ $(function() {
         $row.asEventStream('click').onValue(function() {
           if (!$row.find('.all').length) {
             $row.append(fullTmpl(r))
-            _selected.each(function(it) { toggleHighlight($row.find('.all'), it, true) })
+            $row.find('li[title]').each(function(i, e) {
+              var title = $(e).attr('title')
+              if ($('span.ingredient.selected[title="'+title+'"]').length)
+                toggleHighlight($row.find('ul'), title, true) })
           }
           // setTimeout so that append can finish before using .selected
           // to open the appended row
@@ -188,41 +189,10 @@ $(function() {
       .reverse()
       .map(function(ingredient, index) { return { name: ingredient[0], count: ingredient[1], position: index } })
 
-
     $body.append(templating.search(sortedIngredients))
     $body.append(templating.title(sortedIngredients))
 
-    var $search = $('#search').chosen()
-    $('#search_chzn').css('width', '90%')
-    $('#search_chzn .chzn-drop, #search_chzn input').css('width', '100%')
-    $search.asEventStream('change')
-      .onValue(function() {
-        _selected = _($search.val())
-        updateHighlight(_recipes, _selected)
-      })
-
-    var $clear = $('#clear')
-    $clear.asEventStream('click').onValue(function() {
-      _selected = _([])
-      updateHighlight(_recipes, _selected)
-      syncOptions($search, _selected)
-    })
-
     var ingredientOrderMap = sortedIngredients.map(function(i) { return [i.name, i.position]}).object().value()
-
-    $('#ingredients > span').each(function(i, el) {
-      var $el = $(el)
-      $el.asEventStream('click').onValue(function() {
-        var name = $el.text()
-        if (_selected.contains(name))
-          _selected = _selected.reject(function(it) { return it === name })
-        else
-          _selected.push(name)
-        updateHighlight(_recipes, _selected)
-        syncOptions($search, _selected)
-      })
-    })
-
     var _sortedRecipes = sortRecipes(_recipes)
     _sortedRecipes.each(function(r) {
       r.ingredients = _(r.ingredients)
@@ -232,6 +202,40 @@ $(function() {
       r.className = toClass(r.name)
       r.template = templating.row(r)
       $body.append(r.template)
+    })
+
+    var $search = $('#search').chosen()
+
+    var selection = new IngredientSelection()
+
+    function IngredientSelection() {
+      this.changes = new Bacon.Bus()
+      var selection = this.changes.map(function(it) { return it || [] }).toProperty([])
+      selection.onValue(function(it) {
+        updateHighlight(_recipes, _(it))
+        syncOptions($search, _(it))
+      })
+    }
+
+    $('#search_chzn').css('width', '90%')
+    $('#search_chzn .chzn-drop, #search_chzn input').css('width', '100%')
+    $search.asEventStream('change')
+      .onValue(function() {
+        selection.changes.push($search.val())
+      })
+
+    var $clear = $('#clear')
+    $clear.asEventStream('click').onValue(function() {
+      selection.changes.push([])
+    })
+
+    $('#ingredients > span').each(function(i, el) {
+      var $el = $(el)
+      $el.asEventStream('click').onValue(function() {
+        var name = $el.text()
+        $el.toggleClass('selected')
+        selection.changes.push($('span.ingredient.selected').map(function(i, e) {  return $(e).attr('title') }))
+      })
     })
 
     resize()
