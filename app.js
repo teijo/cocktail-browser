@@ -227,7 +227,7 @@ $(function() {
     $('#search_chzn .chzn-drop, #search_chzn input').css('width', '100%')
 
     selection.changes.plug($search.asEventStream('change').map(function() { return $search.val() }))
-    selection.changes.plug($('#clear').asEventStream('click').map(function() { return [] }))
+    selection.changes.plug($('#clear').asEventStream('click').map([]))
 
     $('#ingredients > span').map($wrap).each(function(i, $el) {
       $el.asEventStream('click').onValue(function() {
