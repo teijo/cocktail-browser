@@ -229,12 +229,9 @@ $(function() {
     selection.changes.plug($search.asEventStream('change').map(function() { return $search.val() }))
     selection.changes.plug($('#clear').asEventStream('click').map([]))
 
-    $('#ingredients > span').map($wrap).each(function(i, $el) {
-      $el.asEventStream('click').onValue(function() {
-        var name = $el.text()
-        $el.toggleClass('selected')
-        selection.changes.push($('span.ingredient.selected').map($wrap).map(function(i, $el) {  return $el.attr('title') }))
-      })
+    $('#ingredients > span').asEventStream('click').map(function(ev) { return $(ev.currentTarget) }).onValue(function($el) {
+      $el.toggleClass('selected')
+      selection.changes.push($('span.ingredient.selected').map($wrap).map(function(i, $el) { return $el.attr('title') }))
     })
 
     resize()
