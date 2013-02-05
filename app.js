@@ -225,15 +225,9 @@ $(function() {
 
     $('#search_chzn').css('width', '90%')
     $('#search_chzn .chzn-drop, #search_chzn input').css('width', '100%')
-    $search.asEventStream('change')
-      .onValue(function() {
-        selection.changes.push($search.val())
-      })
 
-    var $clear = $('#clear')
-    $clear.asEventStream('click').onValue(function() {
-      selection.changes.push([])
-    })
+    selection.changes.plug($search.asEventStream('change').map(function() { return $search.val() }))
+    selection.changes.plug($('#clear').asEventStream('click').map(function() { return [] }))
 
     $('#ingredients > span').map($wrap).each(function(i, $el) {
       $el.asEventStream('click').onValue(function() {
