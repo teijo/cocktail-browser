@@ -1,5 +1,7 @@
 var CELL_WIDTH = 50
 
+function $wrap(i, e) { return $(e) }
+
 function toClass(string) {
   return string.toLowerCase().replace(/\W+/g, "-")
 }
@@ -50,7 +52,7 @@ function reorderByWeight(_recipes, _selected) {
 }
 
 function updateHighlight(_recipes, _selected) {
-  $('span.ingredient').map(function(i, e) { return $(e) }).each(function(i, e) {
+  $('span.ingredient').map($wrap).each(function(i, e) {
     var name = e.attr('title')
     var state = _selected.contains(name)
     toggleHighlight($('body'), name, state)
@@ -62,7 +64,7 @@ function updateHighlight(_recipes, _selected) {
 }
 
 function syncOptions($select, _selected) {
-  $select.find('option').map(function(i, e) { return $(e) }).each(function(i, e) {
+  $select.find('option').map($wrap).each(function(i, e) {
     if (_selected.contains(e.attr('value')))
       e.attr('selected', 'selected')
     else
@@ -89,8 +91,8 @@ $(function() {
         $row.asEventStream('click').onValue(function() {
           if (!$row.find('.all').length) {
             $row.append(fullTmpl(r))
-            $row.find('li[title]').each(function(i, e) {
-              var title = $(e).attr('title')
+            $row.find('li[title]').map($wrap).each(function(i, $el) {
+              var title = $el.attr('title')
               if ($('span.ingredient.selected[title="'+title+'"]').length)
                 toggleHighlight($row.find('ul'), title, true) })
           }
@@ -229,12 +231,11 @@ $(function() {
       selection.changes.push([])
     })
 
-    $('#ingredients > span').each(function(i, el) {
-      var $el = $(el)
+    $('#ingredients > span').map($wrap).each(function(i, $el) {
       $el.asEventStream('click').onValue(function() {
         var name = $el.text()
         $el.toggleClass('selected')
-        selection.changes.push($('span.ingredient.selected').map(function(i, e) {  return $(e).attr('title') }))
+        selection.changes.push($('span.ingredient.selected').map($wrap).map(function(i, $el) {  return $el.attr('title') }))
       })
     })
 
