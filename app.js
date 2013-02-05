@@ -177,6 +177,19 @@ $(function() {
     return _result
   }
 
+  function extendRecipes(_recipes, sortedIngredients) {
+    var ingredientOrderMap = sortedIngredients.map(function(i) { return [i.name, i.position]}).object().value()
+    return sortRecipes(_recipes).map(function(r) {
+      return _.assign(r, {
+        ingredients: _(r.ingredients)
+          .map(function(i) { if (i.ingredient) i.offset = 100 + ingredientOrderMap[i.ingredient] * CELL_WIDTH; return i })
+          .value(),
+        className: toClass(r.name),
+        template: templating.row(r)
+      })
+    })
+  }
+
   var recipeData = Bacon.fromPromise($.getJSON('iba-cocktails/recipes.json'))
   recipeData.onValue(function(recipes) {
     var _recipes = _(recipes)
@@ -191,20 +204,11 @@ $(function() {
       .reverse()
       .map(function(ingredient, index) { return { name: ingredient[0], count: ingredient[1], position: index } })
 
+    _recipes = extendRecipes(_recipes, sortedIngredients)
+
     $body.append(templating.search(sortedIngredients))
     $body.append(templating.title(sortedIngredients))
-
-    var ingredientOrderMap = sortedIngredients.map(function(i) { return [i.name, i.position]}).object().value()
-    var _sortedRecipes = sortRecipes(_recipes)
-    _sortedRecipes.each(function(r) {
-      r.ingredients = _(r.ingredients)
-        .map(function(i) { if (i.ingredient) i.offset = 100 + ingredientOrderMap[i.ingredient] * CELL_WIDTH; return i })
-        .value()
-
-      r.className = toClass(r.name)
-      r.template = templating.row(r)
-      $body.append(r.template)
-    })
+    _recipes.each(function(r) { $body.append(r.template) })
 
     var $search = $('#search').chosen()
 
