@@ -229,10 +229,15 @@ $(function() {
     selection.changes.plug($search.asEventStream('change').map(function() { return $search.val() }))
     selection.changes.plug($('#clear').asEventStream('click').map([]))
 
-    $('#ingredients > span').asEventStream('click').map(function(ev) { return $(ev.currentTarget) }).onValue(function($el) {
-      $el.toggleClass('selected')
-      selection.changes.push($('span.ingredient.selected').map($wrap).map(function(i, $el) { return $el.attr('title') }))
-    })
+    var tabs = $('#ingredients > span').asEventStream('click')
+      .map(function(ev) { return $(ev.currentTarget) })
+      .map(function($el) {
+        var selected = _($('span.ingredient.selected').map(function(i, el) { return $(el).attr('title') }))
+        var title = $el.attr('title')
+        return $el.hasClass('selected') ? selected.without(title) : selected.push(title)
+      })
+
+    selection.changes.plug(tabs)
 
     resize()
   })
