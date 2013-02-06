@@ -25,13 +25,15 @@ function toggleHighlight($el, name, state) {
 function highlightCocktails(_recipes) {
   _recipes.each(function(it) {
     $title = it.template.find(".name")
-    $title.removeClass("hasSome").removeClass("hasHalf").removeClass("hasAll")
+    $title.removeClass("hasAny").removeClass("hasSome").removeClass("hasHalf").removeClass("hasAll")
     if (it.weight == 1.0)
       $title.addClass("hasAll")
     else if (it.weight > 0.6)
       $title.addClass("hasHalf")
     else if (it.weight > 0.3)
       $title.addClass("hasSome")
+    else if (it.weight != 0)
+      $title.addClass("hasAny")
   })
 }
 
