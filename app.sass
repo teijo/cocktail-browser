@@ -2,6 +2,8 @@
 @import "compass/css3/transform"
 @import "compass/css3/box-sizing"
 @import "compass/css3/transition"
+@import "compass/css3/images"
+@import "compass/css3/border-radius"
 
 body
   overflow-x: hidden
@@ -42,12 +44,14 @@ div
 #ingredients
   > span
     cursor: pointer
-    width: 50px
-    height: 100px
-    border: 1px solid #CCC
+    width: 46px
+    height: 96px
+    margin: 2px
     display: block
     float: left
     overflow: hidden
+    +border-radius(3px)
+    background-color: #EEE
     &:not(:nth-child(2))
       border-left: none
     &:hover
@@ -60,7 +64,8 @@ div
       display: block
       width: 100px
       height: 50px
-      padding: 5px
+      padding-left: 10px
+      line-height: 46px
       position: relative
       top: 100px
       +transform-origin(0, 0)
@@ -71,21 +76,27 @@ div.cocktail
   cursor: pointer
   &:hover
     background-color: #EEE
+    .cl
+      background-color: #DDD
   div.ingredients
     position: absolute
     overflow: hidden
     height: 28px
     width: 850px
+    span
+      background-color: #EEE
+      border-radius: 3px
+      margin: 2px
   span
-    border: 1px solid #EEE
     text-align: center
     line-height: 26px
     +box-sizing(border-box)
-    width: 50px
+    width: 46px
     float: left
     font-size: 12px
     &.cl
-      font-size: 20px
+      font-size: 18px
+      height: 22px
       &.selected
         border: none
         background-color: #FEE
@@ -105,7 +116,7 @@ div.cocktail
       background-color: #6C6
       font-weight: bold
   &.selected
-    border: 1px solid #CCC
+    @include background-image(linear-gradient(#EEE, #FFF))
     border-left: none
     border-right: none
     +box-sizing(border-box)
