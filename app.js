@@ -72,7 +72,7 @@ function syncOptions($select, _selected) {
     else
       e.removeAttr('selected')
   })
-  $select.trigger("liszt:updated")
+  setTimeout(function() { $select.trigger("liszt:updated") }, 0)
 }
 
 $(function() {
