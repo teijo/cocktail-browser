@@ -219,9 +219,9 @@ $(function() {
     function IngredientSelection() {
       this.changes = new Bacon.Bus()
       var selection = this.changes.map(function(it) { return it || [] }).toProperty([])
-      selection.onValue(function(it) {
-        updateHighlight(_recipes, _(it))
-        syncOptions($search, _(it))
+      selection.map(_).onValue(function(selection) {
+        updateHighlight(_recipes, selection)
+        syncOptions($search, selection)
       })
     }
 
