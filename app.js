@@ -47,7 +47,7 @@ function calculateWeight(_recipes, _selected) {
 
 function reorderByWeight(_recipes, _selected) {
   var _sortedByWeight = _recipes.sortBy(_selected.size() ? 'weight' : 'originalOrder').reverse()
-  var $body = $('body')
+  var $body = $('#cocktails')
   _sortedByWeight.each(function(it) {
     $body.append(it.template)
   })
@@ -86,6 +86,7 @@ $(function() {
     var fullTmpl = Handlebars.compile($("#full-template").html())
     var imageTmpl = Handlebars.compile($("#image-template").html())
     var searchTmpl = Handlebars.compile($("#search-template").html())
+    var footerTmpl = Handlebars.compile($("#footer-template").html())
 
     return {
       row: function(r) {
@@ -136,6 +137,9 @@ $(function() {
       },
       search: function(ingredients) {
         return searchTmpl(ingredients.value())
+      },
+      footer: function() {
+        return footerTmpl()
       }
     }
   })()
@@ -210,7 +214,10 @@ $(function() {
 
     $body.append(templating.search(sortedIngredients))
     $body.append(templating.title(sortedIngredients))
-    _recipes.each(function(it) { $body.append(it.template) })
+    var $cocktails = $('<div id="cocktails"></div>')
+    $body.append($cocktails)
+    _recipes.each(function(it) { $cocktails.append(it.template) })
+    $body.append(templating.footer())
 
     var $search = $('#search').chosen()
 
