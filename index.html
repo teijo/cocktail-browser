@@ -42,7 +42,7 @@
 </script>
 <script id="row-template" type="text/x-handlebars-template">
   <div class="cocktail {{className}}">
-    <span class="name">{{name}}</span>
+    <span class="name"><span class="availability"></span>{{name}}</span>
     <div class="ingredients">
       {{#ingredients}}
         {{#if offset}}

@@ -110,20 +110,34 @@ div.cocktail
         border: none
         background-color: #FEE
   .name
-    padding-left: 1em
+    padding-left: 20px
     width: 100px
     overflow: hidden
     text-align: left
     border: none
+    .availability
+      width: 20px
+      position: absolute
+      left: 0
+      font-size: 1em
+      &:before
+        content: '\025CC'
     &.hasAny
-      background-color: #FEE
+      .availability:before
+        color: #696
+        content: '\025D4'
     &.hasSome
-      background-color: #FCC
+      .availability:before
+        color: #696
+        content: '\025D1'
     &.hasHalf
-      background-color: #FF9
+      .availability:before
+        color: #393
+        content: '\025D5'
     &.hasAll
-      background-color: #6C6
-      font-weight: bold
+      color: #060
+      .availability:before
+        content: '\025C9'
   &.selected
     @include background-image(linear-gradient(#EEE, #FFF))
     border-left: none
