@@ -219,6 +219,7 @@ $(function() {
     _recipes.each(function(it) { $cocktails.append(it.template) })
     $body.append(templating.footer())
 
+    var $clear = $('#clear')
     var $search = $('#search').chosen()
 
     var selection = new IngredientSelection()
@@ -227,6 +228,10 @@ $(function() {
       this.changes = new Bacon.Bus()
       var selection = this.changes.map(function(it) { return it || [] }).toProperty([])
       selection.map(_).onValue(function(selection) {
+        if (selection.size())
+          $clear.removeAttr('disabled')
+        else
+          $clear.attr('disabled', 'disabled')
         updateHighlight(_recipes, selection)
         syncOptions($search, selection)
       })
@@ -236,7 +241,7 @@ $(function() {
     $('#search_chzn .chzn-drop, #search_chzn input').css('width', '100%')
 
     selection.changes.plug($search.asEventStream('change').map(function() { return $search.val() }))
-    selection.changes.plug($('#clear').asEventStream('click').map([]))
+    selection.changes.plug($clear.asEventStream('click').map([]))
 
     var tabs = $('#ingredients > span').asEventStream('click')
       .map(function(ev) { return $(ev.currentTarget) })
