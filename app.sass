@@ -4,6 +4,10 @@
 @import "compass/css3/transition"
 @import "compass/css3/images"
 @import "compass/css3/border-radius"
+@import "compass/css3/text-shadow"
+
+$default-text-shadow-color: #000
+$default-text-shadow-blur: 10px
 
 body
   overflow-x: hidden
@@ -30,43 +34,44 @@ div
 #cocktails
   width: 100%
 
+header
+  display: inline-block
+  width: 100%
+  background-color: #666
+  color: #FFF
+  @include background-image(linear-gradient(#666, #555))
+
 footer
   width: 100%
   background-color: #EEE
   float: left
   padding: 10px
 
-#ingredientHeader
-  width: 100%
-  overflow: hidden
-  clear: both
-  text-align: center
-  height: 30px
-  line-height: 30px
-
 #ingredients
   left: 100px
   width: 750px
-  height: 130px
+  height: 100px
   overflow: hidden
 
 #ingredients
   > span
     cursor: pointer
-    width: 46px
-    height: 96px
-    margin: 2px
+    width: 50px
+    height: 100px
     display: block
     float: left
     overflow: hidden
-    +border-radius(3px)
-    background-color: #EEE
     &:not(:nth-child(2))
       border-left: none
     &:hover
-      background-color: #FEE
+      background-color: #999
+      color: #000
     &.selected
-      background-color: #FCC
+      background-color: #900
+      @include background-image(linear-gradient(#900, #800))
+      color: #FFF
+      > span
+        +single-text-shadow()
     > span
       font-size: 14px
       cursor: pointer
@@ -108,7 +113,8 @@ div.cocktail
       height: 22px
       &.selected
         border: none
-        background-color: #FEE
+        color: #FFF
+        background-color: #C00
   .name
     padding-left: 20px
     width: 100px
