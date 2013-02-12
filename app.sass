@@ -25,7 +25,8 @@ div
     width: 90%
   #clear
     width: 10%
-    height: 28px
+    height: 35px
+    +border-radius(5px)
 
 #cocktails
   width: 100%
@@ -94,7 +95,7 @@ div.cocktail
     width: 850px
     span
       background-color: #EEE
-      border-radius: 3px
+      +border-radius(3px)
       margin: 2px
   span
     text-align: center
@@ -219,3 +220,8 @@ div.all
       background-position: 250px 0
     &.hurricane
       background-position: 300px 0
+
+.chzn-container-multi .chzn-choices
+  +border-radius(5px)
+  margin-right: 10px
+  padding: 3px
