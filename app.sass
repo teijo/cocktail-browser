@@ -5,6 +5,10 @@
 @import "compass/css3/images"
 @import "compass/css3/border-radius"
 
+=narrow
+  @media screen and (max-width: 600px)
+    @content
+
 body
   overflow-x: hidden
   margin: 0
@@ -24,16 +28,22 @@ div
   padding: 10px
   #search, #search_chzn
     width: 90% !important
+    +narrow
+      width: 80% !important
   #clear
     width: 10%
     height: 35px
     +border-radius(5px)
+    +narrow
+      width: 20%
 
 #cocktails
   width: 100%
 
 header
   display: inline-block
+  +narrow
+    display: none
   width: 100%
   background-color: #666
   color: #FFF
@@ -96,6 +106,8 @@ div.cocktail
     overflow: hidden
     height: 28px
     width: 850px
+    +narrow
+      display: none
     span
       background-color: #EEE
       +border-radius(3px)
@@ -120,6 +132,9 @@ div.cocktail
     overflow: hidden
     text-align: left
     border: none
+    +narrow
+      font-size: 1.1em
+      width: 100%
     .availability
       width: 20px
       position: absolute
@@ -232,18 +247,3 @@ div.all
   +border-radius(5px)
   margin-right: 10px
   padding: 3px
-
-@media screen and (max-width: 600px)
-  header
-    display: none
-  #searchHeader
-    #search, #search_chzn
-      width: 80% !important
-    #clear
-      width: 20%
-  div.cocktail
-    .name
-      font-size: 1.1em
-      width: 100%
-    div.ingredients
-      display: none
