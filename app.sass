@@ -37,7 +37,7 @@ header
   width: 100%
   background-color: #666
   color: #FFF
-  @include background-image(linear-gradient(#666, #555))
+  +background-image(linear-gradient(#666, #555))
 
 footer
   overflow: hidden
@@ -144,7 +144,7 @@ div.cocktail
       .availability:before
         content: '\025C9'
   &.selected
-    @include background-image(linear-gradient(#EEE, #FFF))
+    +background-image(linear-gradient(#EEE, #FFF))
     border-left: none
     border-right: none
     +box-sizing(border-box)
@@ -162,7 +162,7 @@ div.all
   display: block
   max-height: 0
   overflow: hidden
-  @include transition(max-height 0.22s)
+  +transition(max-height 0.22s)
   img
     max-height: 140px
     max-width: 140px
@@ -189,7 +189,7 @@ div.all
       position: relative
       width: 0%
       background-color: #EEE
-      @include transition(width 0.2s)
+      +transition(width 0.2s)
   ul.images
     width: 100%
     padding: 0
