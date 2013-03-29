@@ -22,8 +22,8 @@ div
   background-color: #666
   width: 100%
   padding: 10px
-  #search
-    width: 90%
+  #search, #search_chzn
+    width: 90% !important
   #clear
     width: 10%
     height: 35px
@@ -40,6 +40,7 @@ header
   @include background-image(linear-gradient(#666, #555))
 
 footer
+  overflow: hidden
   width: 100%
   background-color: #EEE
   float: left
@@ -153,6 +154,7 @@ div.cocktail
         display: none
     div.all
       max-height: 500px
+      width: 100%
     &:hover
       background-color: transparent
 
@@ -189,9 +191,12 @@ div.all
       background-color: #EEE
       @include transition(width 0.2s)
   ul.images
+    width: 100%
+    padding: 0
     float: left
     clear: left
     margin: 0 1em 1em 1em
+    +box-sizing(border-box)
     li
       float: left
       margin-right: 1em
@@ -201,7 +206,7 @@ div.all
       text-align: center
   .preparation
     margin: 0 1em 1em 1em
-    width: 500px
+    max-width: 500px
     white-space: normal
   span.glass
     border: none
@@ -227,3 +232,18 @@ div.all
   +border-radius(5px)
   margin-right: 10px
   padding: 3px
+
+@media screen and (max-width: 600px)
+  header
+    display: none
+  #searchHeader
+    #search, #search_chzn
+      width: 80% !important
+    #clear
+      width: 20%
+  div.cocktail
+    .name
+      font-size: 1.1em
+      width: 100%
+    div.ingredients
+      display: none

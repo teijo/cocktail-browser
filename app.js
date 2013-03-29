@@ -237,7 +237,6 @@ $(function() {
       })
     }
 
-    $('#search_chzn').css('width', '90%')
     $('#search_chzn .chzn-drop, #search_chzn input').css('width', '100%')
 
     selection.changes.plug($search.asEventStream('change').map(function() { return $search.val() }))
