@@ -22,6 +22,7 @@ module.exports = function(grunt) {
         unused: true,
         immed: true,
         indent: 2,
+        latedef: true,
         globals: {
           jQuery: true
         },

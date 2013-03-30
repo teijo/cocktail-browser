@@ -219,8 +219,6 @@ $(function() {
     var $clear = $('#clear')
     var $search = $('#search').chosen()
 
-    var selection = new IngredientSelection()
-
     function IngredientSelection() {
       this.changes = new Bacon.Bus()
       var selection = this.changes.map(function(it) { return it || [] }).toProperty([])
@@ -233,6 +231,8 @@ $(function() {
         syncOptions($search, selection)
       })
     }
+
+    var selection = new IngredientSelection()
 
     $('#search_chzn .chzn-drop, #search_chzn input').css('width', '100%')
 
