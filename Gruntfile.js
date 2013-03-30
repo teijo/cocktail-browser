@@ -14,20 +14,19 @@ module.exports = function(grunt) {
     },
     jshint: {
       options: {
-        asi: true,
-        curly: false,
-        eqeqeq: true,
-        eqnull: true,
-        browser: true,
-        unused: true,
-        immed: true,
-        indent: 2,
-        latedef: true,
-        globals: {
-          jQuery: true
-        },
+        jshintrc: ".jshintrc"
       },
-      uses_defaults: ['app.js']
+      with_overrides: {
+        options: {
+          asi: true,
+          curly: false,
+          strict: false,
+          predef : ['$', 'Bacon', '_', 'Handlebars'],
+        },
+        files: {
+          src: ['app.js']
+        }
+      }
     },
     concat: {
       options: {

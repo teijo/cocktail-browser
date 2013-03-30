@@ -20,7 +20,7 @@ function toggleHighlight($el, name, state) {
 
 function highlightCocktails(_recipes) {
   _recipes.each(function(it) {
-    $title = it.template.find(".name")
+    var $title = it.template.find(".name")
     $title.removeClass("hasAny").removeClass("hasSome").removeClass("hasHalf").removeClass("hasAll")
     if (it.weight === 1.0)
       $title.addClass("hasAll")
@@ -104,7 +104,7 @@ $(function() {
           if (!$row.find('ul.images li').length) {
             var query = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+r.name+"%20cocktail%20drink&callback=?"
             Bacon.fromPromise($.getJSON(query))
-              .filter(function(response) { return response.responseData != null })
+              .filter(function(response) { return response.responseData !== null })
               .map(function(response) { return _(response.responseData.results).pluck('tbUrl') })
               .onValue(function(thumbUrls) {
                 var thumbStream = new Bacon.Bus()
@@ -174,7 +174,8 @@ $(function() {
       }
       previous = r
       listed.push(r.name)
-      r.originalOrder = --weight
+      weight -= 1
+      r.originalOrder = weight
       _result.push(r)
     })
     return _result
