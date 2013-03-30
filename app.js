@@ -6,10 +6,6 @@ function toClass(string) {
   return string.toLowerCase().replace(/\W+/g, "-")
 }
 
-function ingredientToString(ingredient) {
-  return (ingredient.special !== undefined) ? ingredient.special : ingredient.cl+"cl "+ingredient.ingredient
-}
-
 function resize() {
   var width = $(window).width()
   var remainder = width % 50
@@ -26,13 +22,13 @@ function highlightCocktails(_recipes) {
   _recipes.each(function(it) {
     $title = it.template.find(".name")
     $title.removeClass("hasAny").removeClass("hasSome").removeClass("hasHalf").removeClass("hasAll")
-    if (it.weight == 1.0)
+    if (it.weight === 1.0)
       $title.addClass("hasAll")
     else if (it.weight > 0.6)
       $title.addClass("hasHalf")
     else if (it.weight > 0.3)
       $title.addClass("hasSome")
-    else if (it.weight != 0)
+    else if (it.weight !== 0)
       $title.addClass("hasAny")
   })
 }
@@ -148,7 +144,7 @@ $(function() {
     var correlation = {}
     _recipes.each(function(r1) {
       var current = correlation[r1.name] = {}
-      _recipes.filter(function(it) { return it != r1 }).each(function(r2) {
+      _recipes.filter(function(it) { return it !== r1 }).each(function(r2) {
         var common = 0
         _(r1.ingredients)
           .filter(function(it) { return it.ingredient !== undefined })

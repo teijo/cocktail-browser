@@ -12,6 +12,20 @@ module.exports = function(grunt) {
         command: 'compass compile'
       }
     },
+    jshint: {
+      options: {
+        asi: true,
+        curly: false,
+        eqeqeq: true,
+        eqnull: true,
+        browser: true,
+        unused: true,
+        globals: {
+          jQuery: true
+        },
+      },
+      uses_defaults: ['app.js']
+    },
     concat: {
       options: {
         separator: ';'
@@ -58,8 +72,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-css');
 
-  grunt.registerTask('default', ['shell', 'concat', 'uglify', 'cssmin']);
+  grunt.registerTask('default', ['jshint', 'shell', 'concat', 'uglify', 'cssmin']);
 };
