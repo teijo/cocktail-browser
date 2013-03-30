@@ -20,6 +20,8 @@ module.exports = function(grunt) {
         eqnull: true,
         browser: true,
         unused: true,
+        immed: true,
+        indent: 2,
         globals: {
           jQuery: true
         },

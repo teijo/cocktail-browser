@@ -93,7 +93,8 @@ $(function() {
             $row.find('li[title]').map($wrap).each(function(i, $el) {
               var title = $el.attr('title')
               if ($('span.ingredient.selected[title="'+title+'"]').length)
-                toggleHighlight($row.find('ul'), title, true) })
+                toggleHighlight($row.find('ul'), title, true)
+            })
           }
           // setTimeout so that append can finish before using .selected
           // to open the appended row
@@ -153,7 +154,7 @@ $(function() {
               .filter(function(it2) { return it.ingredient === it2.ingredient })
               .each(function(it2) {
                 common += Math.min(it.cl, it2.cl)
-            })
+              })
           })
         current[r2.name] = common
       })
