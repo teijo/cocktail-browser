@@ -23,6 +23,8 @@ function highlightCocktails(_recipes) {
     var $avail = it.template.find(".availability")
     if (it.weight > 0)
       $avail.text(it.found + '/' + it.ingredients.length)
+    else
+      $avail.text('')
     $avail.removeClass("hasAny").removeClass("hasSome").removeClass("hasHalf").removeClass("hasAll")
     if (it.weight === 1.0)
       $avail.addClass("hasAll")
