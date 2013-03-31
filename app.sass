@@ -138,7 +138,7 @@ div.cocktail
         color: #FFF
         background-color: #A00
   .name
-    padding-left: 20px
+    padding-left: 24px
     width: 100px
     overflow: hidden
     text-align: left
@@ -151,24 +151,15 @@ div.cocktail
       position: absolute
       left: 0
       font-size: 1em
-      &:before
-        content: '\025CC'
-    &.hasAny
-      .availability:before
-        color: #696
-        content: '\025D4'
-    &.hasSome
-      .availability:before
-        color: #696
-        content: '\025D1'
-    &.hasHalf
-      .availability:before
-        color: #393
-        content: '\025D5'
-    &.hasAll
-      color: #060
-      .availability:before
-        content: '\025C9'
+      line-height: 2em
+      &.hasAll
+        background-color: #0C0
+      &.hasHalf
+        background-color: #9C0
+      &.hasSome
+        background-color: #990
+      &.hasAny
+        background-color: #960
   &.selected
     +background-image(linear-gradient(#EEE, #FFF))
     border-left: none

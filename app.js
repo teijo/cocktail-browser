@@ -20,16 +20,18 @@ function toggleHighlight($el, name, state) {
 
 function highlightCocktails(_recipes) {
   _recipes.each(function(it) {
-    var $title = it.template.find(".name")
-    $title.removeClass("hasAny").removeClass("hasSome").removeClass("hasHalf").removeClass("hasAll")
+    var $avail = it.template.find(".availability")
+    if (it.weight > 0)
+      $avail.text(it.found + '/' + it.ingredients.length)
+    $avail.removeClass("hasAny").removeClass("hasSome").removeClass("hasHalf").removeClass("hasAll")
     if (it.weight === 1.0)
-      $title.addClass("hasAll")
+      $avail.addClass("hasAll")
     else if (it.weight > 0.6)
-      $title.addClass("hasHalf")
+      $avail.addClass("hasHalf")
     else if (it.weight > 0.3)
-      $title.addClass("hasSome")
+      $avail.addClass("hasSome")
     else if (it.weight !== 0)
-      $title.addClass("hasAny")
+      $avail.addClass("hasAny")
   })
 }
 
@@ -38,6 +40,7 @@ function calculateWeight(_recipes, _selected) {
     var total = it.ingredients.length
     var found = _.filter(it.ingredients, function(it) { return _selected.contains(it.ingredient) }).length
     it.weight = found / total
+    it.found = found
   })
 }
 
