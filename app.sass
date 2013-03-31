@@ -26,6 +26,9 @@ div
   background-color: #666
   width: 100%
   padding: 10px
+  height: 155px
+  +narrow
+    height: 55px
   #search, #search_chzn
     width: 90% !important
     +narrow
@@ -42,12 +45,20 @@ div
 
 header
   display: inline-block
+  position: absolute
+  top: 55px
+  left: 0
+  z-index: 1
   +narrow
     display: none
   width: 100%
   background-color: #666
   color: #FFF
   +background-image(linear-gradient(#666, #555))
+  &.dock
+    position: fixed
+    top: 0
+    left: 0
 
 footer
   overflow: hidden

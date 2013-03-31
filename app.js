@@ -73,8 +73,12 @@ function syncOptions($select, _selected) {
 
 $(function() {
   var $body = $("body")
+  var $window = $(window)
 
-  $(window).asEventStream('resize').throttle(300).onValue(resize)
+  $window.asEventStream('resize').throttle(300).onValue(resize)
+  $window.asEventStream('scroll').onValue(function() {
+    $('header').toggleClass('dock', (window.scrollY > 55))
+  })
 
   var templating = (function() {
     var titleTmpl = Handlebars.compile($("#title-template").html())
