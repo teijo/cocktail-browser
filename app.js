@@ -171,7 +171,7 @@ $(function() {
     return correlation
   }
 
-  function sortRecipes(_recipes) {
+  function sortByCorrelation(_recipes) {
     var correlation = calculateCorrelation(_recipes)
     var listed = []
     var previous = null
@@ -190,12 +190,28 @@ $(function() {
     return _result
   }
 
+  function sortByName(_recipes) {
+    return _recipes.sort(function(a, b) { return -1 * a.name.localeCompare(b.name) })
+  }
+
   function extendRecipes(_recipes, sortedIngredients) {
-    var ingredientOrderMap = sortedIngredients.map(function(i) { return [i.name, i.position]}).object().value()
-    return sortRecipes(_recipes).map(function(it) {
+    var ingredientOrderMap = sortedIngredients.map(function (i) {
+      return [i.name, i.position]
+    }).object().value()
+
+    var sortedRecipes
+    if (window.innerWidth > 600)
+      sortedRecipes = sortByCorrelation(_recipes);
+    else
+      sortedRecipes = sortByName(_recipes);
+
+    return sortedRecipes.map(function (it) {
       return _.assign(it, {
         ingredients: _(it.ingredients)
-          .map(function(i) { if (i.ingredient) i.offset = 100 + ingredientOrderMap[i.ingredient] * CELL_WIDTH; return i })
+          .map(function (i) {
+            if (i.ingredient) i.offset = 100 + ingredientOrderMap[i.ingredient] * CELL_WIDTH;
+            return i
+          })
           .value(),
         className: toClass(it.name),
         template: templating.row(it)
