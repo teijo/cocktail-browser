@@ -45,7 +45,7 @@
     <div class="ingredients">
       {{#ingredients}}
         {{#if offset}}
-          <span style="position: absolute; left: {{offset}}px; " title="{{ingredient}}" class="cl">{{cl}}</span>
+          <span style="position: absolute; left: {{offset}}px; " title="{{ingredient}}" class="cl">{{amount}}</span>
         {{/if}}
       {{/ingredients}}
     </div>
@@ -56,8 +56,8 @@
     <span class="glass {{glass}}"></span>
     <ul class="ingredients">
       {{#ingredients}}
-        {{#if cl}}
-          <li title="{{ingredient}}">{{cl}}cl {{#if label }}{{label}} ({{ingredient}}){{else}}{{ingredient}}{{/if}}</li>
+        {{#if unit}}
+          <li title="{{ingredient}}">{{amount}}{{unit}} {{#if label }}{{label}} ({{ingredient}}){{else}}{{ingredient}}{{/if}}</li>
         {{else}}
           <li>{{special}}</li>
         {{/if}}

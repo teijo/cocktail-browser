@@ -11,7 +11,8 @@
     "grunt-contrib-watch": "0.6.1",
     "grunt-css": ">=0.5.4",
     "grunt-shell": ">=1.1.2",
-    "jshint": "^2.8.0"
+    "jshint": "^2.8.0",
+    "iba-cocktails": "git://github.com/teijo/iba-cocktails.git#9ac409d"
   },
   "engines": {
     "node": "0.8.21"

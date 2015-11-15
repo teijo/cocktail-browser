@@ -162,7 +162,10 @@ $(function() {
             _(r2.ingredients)
               .filter(function(it2) { return it.ingredient === it2.ingredient })
               .each(function(it2) {
-                common += Math.min(it.cl, it2.cl)
+                if (it.unit !== "cl" || it2.unit !== "cl") {
+                  throw new Error("Expects only 'cl' as unit of measure, got " + it.unit + " and " + it2.unit)
+                }
+                common += Math.min(it.amount, it2.amount)
               })
           })
         current[r2.name] = common
