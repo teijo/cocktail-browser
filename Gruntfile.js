@@ -13,15 +13,14 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
-      options: {
-        jshintrc: ".jshintrc"
-      },
+      // https://github.com/gruntjs/grunt-contrib-jshint/issues/90#issuecomment-23630189
+      options: grunt.file.readJSON(".jshintrc"),
       with_overrides: {
         options: {
           asi: true,
           curly: false,
           strict: false,
-          predef : ['$', 'Bacon', '_', 'Handlebars'],
+          predef: ['$', 'Bacon', '_', 'Handlebars']
         },
         files: {
           src: ['app.js']
